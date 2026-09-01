@@ -29,8 +29,7 @@ export const site = {
 
   /* ---------- 2. SOCIAL ---------- */
   socials: {
-    // TODO: wasn't on your CV. Add "https://github.com/username" and the icon appears.
-    github: "",
+    github: "https://github.com/blackhead-exe",
     linkedin: "https://linkedin.com/in/ali-raza-3b1705247",
     x: "",
   },
