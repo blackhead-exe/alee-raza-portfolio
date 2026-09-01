@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { site } from "@/content/site";
@@ -222,6 +223,51 @@ export default async function ProjectPage({
                         {decision.body}
                       </p>
                     </div>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          {/* ---------- screenshots of the real build ---------- */}
+          {study.gallery && study.gallery.length > 0 ? (
+            <div className="mt-16">
+              <Reveal>
+                <h2 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+                  Inside the build
+                </h2>
+                <p className="mt-3 text-base leading-relaxed text-body">
+                  Screenshots from the live system. Webhook URLs, contact
+                  records and anything else identifying have been removed.
+                </p>
+              </Reveal>
+              <div className="mt-8 grid gap-6 sm:grid-cols-2">
+                {study.gallery.map((shot, i) => (
+                  <Reveal
+                    key={shot.src}
+                    delay={i * 60}
+                    className={shot.tall ? "" : "sm:col-span-2"}
+                  >
+                    <figure className="overflow-hidden rounded-xl border border-line bg-surface">
+                      <a
+                        href={shot.src}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="block"
+                      >
+                        <Image
+                          src={shot.src}
+                          alt={shot.caption}
+                          width={1600}
+                          height={800}
+                          sizes="(max-width: 640px) 100vw, 720px"
+                          className="h-auto w-full"
+                        />
+                      </a>
+                      <figcaption className="border-t border-line bg-canvas px-4 py-3 text-sm text-body">
+                        {shot.caption}
+                      </figcaption>
+                    </figure>
                   </Reveal>
                 ))}
               </div>

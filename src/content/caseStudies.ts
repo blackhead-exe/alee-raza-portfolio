@@ -21,13 +21,18 @@ export type CaseStudy = {
   decisions?: { title: string; body: string }[];
   /** Metric strip near the end. Keep these true and specific. */
   outcomes?: { value: string; label: string }[];
+  /**
+   * Screenshots of the real build. Scrub these before adding them:
+   * no webhook URLs, no customer records, no tokens.
+   */
+  gallery?: { src: string; caption: string; tall?: boolean }[];
 };
 
 export const caseStudies: Record<string, CaseStudy> = {
   /* ============================================================ */
   "insurance-crm-multi-account": {
     intro:
-      "A life insurance application carries a customer's social security number, full bank account and routing details, and complete medical history. Four different teams touch that application, and none of them needs all of it. This system splits the work across four GoHighLevel sub-accounts joined by webhooks, and destroys each piece of data at the point the team holding it stops needing it.",
+      "A life insurance application carries a social security number, full bank details and a complete medical history, and four separate teams touch it on the way to a funded policy. This system splits that work across four GoHighLevel sub-accounts joined entirely by webhooks, and clears the sensitive data out of the account with the largest team the moment that team stops needing it.",
     meta: [
       { label: "Role", value: "CRM systems architect" },
       { label: "Year", value: "2026" },
@@ -39,36 +44,32 @@ export const caseStudies: Record<string, CaseStudy> = {
       {
         heading: "The problem",
         paragraphs: [
-          "A single insurance application collects an SSN, a bank routing and account number, a draft date, a full medication and health history, and the customer's doctor's contact details. Four separate teams touch that application on its way through: a verifier who qualifies the lead, a closer who completes the application, a validator who submits it to the carrier, and a retention team who manages the policy for the following year.",
-          "Run in one CRM account, every one of those people can open any contact and read all of it, indefinitely. That is not a permissions problem you can configure your way out of either: GoHighLevel has no field-level read restrictions for standard user roles. If a field exists on a record a user can open, that user can read it.",
-          "So the separation had to be architectural rather than administrative. Four sub-accounts, four teams, and a rule that data moves only where the job requires it and is destroyed at the point that job ends.",
+          "A single insurance application collects an SSN, a bank routing and account number, a draft date, a full medication and health history, and the customer's doctor's contact details. Four separate teams touch that application on its way through: a verifier who qualifies the lead, a closer who completes the application, a validator who submits it to the carrier, and a retention team who services the policy through its first funded year.",
+          "Run in one account, everyone can open any contact and read all of it, forever. That is not a permissions problem you can configure your way out of either: GoHighLevel has no field-level read restrictions for standard user roles. If a field exists on a record a user can open, that user can read it.",
+          "So the separation had to be structural. Four sub-accounts with four teams and four different jobs, connected by webhooks rather than by shared access, and a rule that the largest, least-restricted team keeps the sensitive data only while it is actually completing the application.",
         ],
       },
       {
         heading: "Four accounts, one lead journey",
         paragraphs: [
-          "There is no shared database. Every handoff between accounts is a webhook, and every account is a self-contained GoHighLevel sub-account with its own pipeline, fields, tags and team.",
+          "There is no shared database. Every handoff between accounts is a webhook, and every account is a self-contained GoHighLevel sub-account with its own pipelines, fields, tags and team.",
         ],
         bullets: [
-          "Verifier: no GoHighLevel login at all. They submit a public 12-field form that deduplicates on phone number and updates rather than duplicating. Submission creates the contact, assigns it to the named closer through a branch per closer, opens an opportunity at New Lead and emails that closer.",
-          "Closer: a 10-stage pipeline. The closer completes the full application, then moves the card to Sent to Validation. That single stage change copies the contact into the Validator account, stamps the status Pending, locks the card into a read-only Pending stage and tags it so it cannot re-fire.",
-          "Validator: an 8-stage pipeline. The validator reviews, submits to the carrier, then sets one dropdown, Validator Decision. That field is the entire control surface: changing it to Approved, Declined, Send Back or Call Back drives four different outcome workflows.",
-          "Retention: two pipelines in one account, a 4-stage retention pipeline and a 15-stage funding pipeline, receiving data only when a deal is approved.",
-          "Central: a passive mirror. Every account copies a snapshot to Central on every meaningful event, so one account holds the complete history while the working accounts stay minimal.",
+          "Verifier: no GoHighLevel login at all. They submit a public form that deduplicates on phone number and updates rather than duplicating. Submission creates the contact, assigns it to the named closer through a branch per closer, opens an opportunity at New Lead and emails that closer.",
+          "Closer: a 13-stage pipeline running from New Lead through Working, Sent to Validation and Pending, out to Declined, Sent Back, Call Back Scheduled, DNC and Not Interested, and finally to Approved — Data Wiped, DNF Case or Chargeback Case.",
+          "Validator: a 9-stage pipeline. The validator reviews, sends the application to head office and the carrier, then sets one field. That field is the entire control surface: Approved, Declined, Sent Back to Closer or Call Back each drive a different outcome workflow.",
+          "Retention: two pipelines in one account. A retention pipeline built around a follow-up cadence, a 3-day pre-follow-up, a 7-day post-follow-up and then correspondence tracking, plus a separate funding pipeline that tracks the policy payment by payment.",
+          "Central: the archive. Every account pushes a snapshot to Central on every meaningful event, so one account holds the complete history of a case even after other accounts have moved on from it.",
         ],
       },
       {
-        heading: "Data minimisation by design",
+        heading: "What happens to the sensitive data",
         paragraphs: [
-          "This is the part of the build that mattered most, and it is enforced in three separate places rather than trusted to policy.",
-          "First, the wipe. When the validator marks an application approved, a workflow in the Closer account nulls eleven fields on that contact: SSN, bank name, bank address, routing number, account number, account type, initial draft date, the full medication and health history, and the doctor's name, address and phone. It then adds a sensitive-data-wiped tag as an audit trail. From that moment the closer sees a name and the word Approved.",
-          "Second, the payloads. That same approval fires three outbound webhooks, and each one carries a deliberately different body.",
-        ],
-        bullets: [
-          "To the Closer: 5 fields. Enough to identify the contact and trigger the wipe, nothing more.",
-          "To Retention: 14 fields, covering name, address, carrier, plan, premium and beneficiary. SSN, every banking field and every medical field are explicitly excluded.",
-          "To the Funding pipeline: 7 fields. No address, no beneficiary, nothing sensitive. Just enough to track whether the money arrives.",
-          "Third, the boundary: banking, SSN and medical data never enter the Retention account at all. Not restricted there, not present there.",
+          "GoHighLevel cannot hide a field from a user who can open the record. So rather than pretend permissions would solve it, the system limits how long the most exposed team holds the data.",
+          "The closers are the largest group, they work the widest range of records, and once an application is approved they have no further use for the applicant's SSN, bank account or medical history. So that is exactly when it goes. The approval webhook lands in the Closer account, finds the contact by phone, updates the status, moves the card to Approved — Data Wiped, pushes a final snapshot to Central, and then runs a Clear all sensitive data step that blanks the banking, social and medical fields on the record. A tag is added so the deletion itself is auditable rather than silent.",
+          "From that point a closer opening the record sees a name and the word Approved. The data is not hidden from them, it is not there.",
+          "The order of those steps is deliberate. Central receives the full record immediately before the wipe runs, not after, so the complete case survives in one place while the working account is stripped back. Central is not a place anyone works; it is a sealed copy that exists so the accounts people use every day do not have to be the ones holding everything.",
+          "Retention receives the policy record it needs to service the customer, including the banking details the funding side of the account has to reconcile against for twelve months. That is a smaller, admin-restricted team than the closer floor, and it is the trade this design makes explicitly rather than by accident.",
         ],
       },
       {
@@ -79,11 +80,11 @@ export const caseStudies: Record<string, CaseStudy> = {
         ],
       },
       {
-        heading: "Retention and the 12-month funding tracker",
+        heading: "Retention and the funding year",
         paragraphs: [
-          "An approved policy is not a closed deal. It only counts once the customer actually pays, and pays for twelve months.",
-          "Approval creates two opportunities in the Retention account: one in the retention pipeline where an agent manages the relationship, and one in a 15-stage funding pipeline that tracks payment month by month. Each confirmed payment increments a month counter and advances the card one stage, records the first and last funded dates, and refreshes an actively-paying tag. On the twelfth increment the funding deal completes and the retention deal moves to Post-Retention automatically.",
-          "Annual premium is calculated on arrival as monthly premium times twelve, so the value of a policy is present in the account from the first day rather than derived later.",
+          "An approved policy is not a closed deal. It only counts once the customer actually pays, and keeps paying for twelve months.",
+          "Approval creates two opportunities in the Retention account: one in the retention pipeline, where an agent works a defined follow-up cadence, and one in a funding pipeline that tracks payment month by month. Each confirmed payment increments a month counter, advances the card one stage, records the first and last funded dates and refreshes an actively-paying tag. On the twelfth increment the funding deal completes and the retention side closes out with it.",
+          "Annual premium is calculated on arrival as monthly premium times twelve, so the value of a policy is present in the account from its first day rather than worked out later.",
         ],
       },
       {
@@ -97,16 +98,12 @@ export const caseStudies: Record<string, CaseStudy> = {
     ],
     decisions: [
       {
-        title: "Wiping data instead of restricting it",
-        body: "The obvious approach is to hide sensitive fields from closers through permissions. GoHighLevel does not offer field-level read restrictions for standard user roles, so that approach does not exist here. Rather than pretend otherwise, access is bounded by time instead of by role: the closer has the data while they are actively completing the application and it is destroyed the moment the application is approved. The sensitive-data-wiped tag means the deletion itself is auditable, and the record still shows an admin that values were wiped rather than never captured.",
+        title: "Clearing the closer's copy instead of restricting it",
+        body: "The obvious approach is to hide sensitive fields from closers through permissions. GoHighLevel does not offer field-level read restrictions for standard user roles, so that approach does not exist here. Rather than pretend otherwise, access is bounded by time: the closer has the data while they are actively completing the application, and it is cleared the moment the application is approved. The audit tag means the deletion is recorded rather than silent, so an admin can still see that values were captured and then removed rather than never taken.",
       },
       {
-        title: "A different payload for every destination",
-        body: "It would have been far less work to send one full payload everywhere and control visibility at the far end. Writing three separate payloads means Retention and Funding are structurally incapable of leaking data they never received. A breach or a careless export in the Retention account cannot expose an SSN, because there is no SSN in that account to expose.",
-      },
-      {
-        title: "Central as the only complete record",
-        body: "Minimising data everywhere creates a real risk of losing the audit trail entirely. Central solves that by receiving a mirror on every event, so exactly one account holds the full history and it is one nobody works in day to day. The working accounts get to stay minimal precisely because the archive exists somewhere else.",
+        title: "Central gets the full record before the wipe, not after",
+        body: "Stripping data out of working accounts creates a real risk of losing the case history entirely. Sequencing the Central snapshot immediately before the clear step means the complete record lands somewhere permanent first, and only then does the working copy get cut back. It is one step ordering decision, and getting it the other way round would have quietly destroyed the archive.",
       },
       {
         title: "Mirroring field keys exactly across accounts",
@@ -114,22 +111,70 @@ export const caseStudies: Record<string, CaseStudy> = {
       },
       {
         title: "Enforcing mandatory reasons with a wait chain",
-        body: "GoHighLevel cannot make a field mandatory, so a validator could decline an application and send a closer a rejection with no explanation. The decline workflow checks whether the reason is filled, waits five minutes and checks again, then raises a high-priority task assigned to that validator and pauses until the field is filled, with a 24-hour timeout that escalates to an admin. The webhook to the closer only fires once a reason exists. The constraint is enforced by the system rather than requested in a training document.",
+        body: "GoHighLevel cannot make a field mandatory, so a validator could decline an application and send a closer a rejection with no explanation. The decline workflow checks whether the reason is filled, waits and checks again, then raises a high-priority task assigned to that validator and pauses until the field is filled, with a timeout that escalates. The webhook to the closer only fires once a reason exists, so the constraint is enforced by the system rather than requested in a training document.",
       },
       {
         title: "Phone number as the join key",
-        body: "Four sub-accounts with no shared database still need a way to agree on who a contact is. Every webhook payload carries the phone number and every receiving workflow finds the contact by it, with the intake form deduplicating on the same field and updating rather than creating. It is a deliberately boring choice, and it holds because a phone number is the one identifier this business always has and rarely changes.",
+        body: "Four sub-accounts with no shared database still need a way to agree on who a contact is. Every webhook payload carries the phone number and every receiving workflow opens with a Find Contact on it, with the intake form deduplicating on the same field and updating rather than creating. It is a deliberately boring choice, and it holds because a phone number is the one identifier this business always has and rarely changes.",
+      },
+      {
+        title: "Deciding what happens when the contact is not there",
+        body: "Every inbound webhook branches on whether Find Contact actually found something, and the two accounts answer that question differently on purpose. In the Closer account a miss ends the workflow, because a record that should already exist and does not is a signal something upstream went wrong, and inventing one would hide it. In Retention a miss creates the contact, because an approved policy arriving from the Validator is the first time that account has ever heard of this person. The branch nobody thinks about is the one that decides whether a system fails loudly or quietly.",
       },
       {
         title: "Re-entry configured per outcome, not globally",
-        body: "Approval fires once per lead and re-entry is off, because approving twice would wipe data twice and double-notify Retention. Decline, send back and call back all allow re-entry, because a single lead genuinely can cycle through rework several times. Getting this wrong in either direction produces either duplicate records or leads that silently stop moving, so it was decided per workflow rather than left at a default.",
+        body: "Approval fires once per lead and re-entry is off, because approving twice would clear data twice and double-notify Retention. Decline, send back and call back all allow re-entry, because a single lead genuinely can cycle through rework several times. Getting this wrong in either direction produces either duplicate records or leads that silently stop moving, so it was decided per workflow rather than left at a default.",
       },
     ],
     outcomes: [
       { value: "4", label: "Sub-accounts" },
-      { value: "37", label: "Pipeline stages" },
-      { value: "20", label: "Workflows" },
-      { value: "11", label: "Fields wiped on approval" },
+      { value: "4", label: "Pipelines" },
+      { value: "13", label: "Closer pipeline stages" },
+      { value: "12", label: "Month funding tracker" },
+    ],
+    gallery: [
+      {
+        src: "/projects/insurance/closer-approval-wipe-workflow.png",
+        caption:
+          "Closer account. The approval webhook lands, finds the contact by phone, and ends the run if there is no match. On the found branch it updates the status, moves the card to Approved, pushes the full record to Central, and only then clears the sensitive fields.",
+      },
+      {
+        src: "/projects/insurance/validator-approval-fanout.png",
+        caption:
+          "Validator account. One field changing to Approved fans out to four destinations: the Closer account, Retention, the funding pipeline and Central.",
+      },
+      {
+        src: "/projects/insurance/retention-inbound-workflow.png",
+        caption:
+          "Retention account. The same Find Contact branch resolves the other way here: no match means this is a new policy holder, so the contact is created rather than the run being abandoned.",
+      },
+      {
+        src: "/projects/insurance/closer-pipeline-stages.png",
+        caption:
+          "The 13-stage Closer pipeline, including the read-only Pending stage a card is locked into while the Validator reviews, and the DNF and Chargeback stages a case returns to months later.",
+      },
+      {
+        src: "/projects/insurance/validation-pipeline-stages.png",
+        caption:
+          "The Validation pipeline, from Received from Closer through carrier submission to the four decision outcomes.",
+      },
+      {
+        src: "/projects/insurance/retention-pipeline-stages.png",
+        caption:
+          "The Retention pipeline, built around a follow-up cadence rather than deal stages.",
+      },
+      {
+        src: "/projects/insurance/closer-inbound-webhook.png",
+        caption:
+          "An inbound webhook trigger in the Closer account, with the mapping reference showing the fields the Validator sends across.",
+        tall: true,
+      },
+      {
+        src: "/projects/insurance/retention-webhook-payload.png",
+        caption:
+          "The payload arriving in Retention on approval, carrying the carrier, plan, premium and the banking details the funding side reconciles against.",
+        tall: true,
+      },
     ],
   },
 

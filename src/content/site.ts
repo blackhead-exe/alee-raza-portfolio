@@ -65,12 +65,12 @@ export const site = {
       slug: "insurance-crm-multi-account",
       period: "2026",
       blurb:
-        "A four sub-account GoHighLevel system for a US life insurance operation, where a lead moves from Closer to Validator to Retention entirely through webhooks, and sensitive data is destroyed the moment a team no longer needs it.",
+        "A four sub-account GoHighLevel system for a US life insurance operation, where a lead moves from Closer to Validator to Retention entirely through webhooks, and the banking, social and medical data is cleared off the closer's copy of the record the moment the application is approved.",
       highlights: [
-        "On approval the system nulls 11 sensitive fields from the Closer account, the full SSN, banking and medical set, and stamps a sensitive-data-wiped audit tag, because GoHighLevel has no field-level read restrictions for standard user roles.",
-        "Each approval fires three outbound webhooks carrying three deliberately different payloads, so Retention and Funding only ever receive the fields their job needs and SSN, banking and medical data never enter those accounts at all.",
-        "37 pipeline stages across 4 pipelines, 20 workflows and 31 tags, with every cross-account handoff built on inbound and outbound webhooks joined on phone number rather than a shared database.",
-        "A 12-month funding tracker that auto-increments and advances stage on each confirmed payment, plus DNF and chargeback paths that route the case back to the original closer with the reason attached.",
+        "GoHighLevel has no field-level read restrictions for standard user roles, so access is bounded by time instead: on approval a workflow clears the banking, social and medical fields off the closer's record and tags it, making the deletion auditable rather than silent.",
+        "Central receives the complete record immediately before that clear step rather than after, so the full case survives in a sealed archive while the account people work in every day is stripped back.",
+        "Four pipelines across four sub-accounts, 13 stages in the Closer pipeline alone, with every cross-account handoff an inbound or outbound webhook joined on phone number rather than a shared database.",
+        "A 12-month funding tracker that advances a stage on each confirmed payment, plus DNF and chargeback paths that route the case back to the original closer with the reason attached.",
       ],
       tags: [
         "GoHighLevel",
