@@ -5,49 +5,48 @@ import Section from "./Section";
 import { ArrowUpRightIcon, GithubIcon } from "./Icons";
 
 function ProjectCard({ project }: { project: Project }) {
-  const primaryHref = project.live || project.github || undefined;
-
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-canvas transition-all duration-300 hover:-translate-y-1 hover:border-accent-line hover:shadow-[0_18px_40px_-24px_rgba(11,18,32,0.35)]">
-      <div className="relative aspect-[16/9] overflow-hidden border-b border-line bg-surface">
-        {project.image ? (
+    <article className="overflow-hidden rounded-2xl border border-line bg-canvas transition-colors duration-300 hover:border-accent-line">
+      {project.image ? (
+        <div className="relative aspect-[21/9] border-b border-line bg-surface">
           <Image
             src={project.image}
             alt={project.title}
             fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            sizes="(max-width: 768px) 100vw, 900px"
+            className="object-cover"
           />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,var(--color-accent-soft),var(--color-surface))]">
-            <span className="px-6 text-center text-sm font-medium tracking-tight text-accent/70">
-              {project.title}
+        </div>
+      ) : null}
+
+      <div className="p-6 sm:p-8">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <h3 className="text-xl font-semibold tracking-tight text-ink">
+            {project.title}
+          </h3>
+          {project.featured ? (
+            <span className="rounded-full border border-accent-line bg-accent-soft px-2.5 py-0.5 text-[0.7rem] font-medium uppercase tracking-wide text-accent">
+              Featured
             </span>
-          </div>
-        )}
-      </div>
+          ) : null}
+          <span className="ml-auto text-sm text-muted">{project.period}</span>
+        </div>
 
-      <div className="flex flex-1 flex-col p-6">
-        <h3 className="text-lg font-semibold tracking-tight text-ink">
-          {primaryHref ? (
-            <a
-              href={primaryHref}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="transition-colors hover:text-accent"
-            >
-              {project.title}
-            </a>
-          ) : (
-            project.title
-          )}
-        </h3>
-
-        <p className="mt-2.5 flex-1 text-sm leading-relaxed text-body">
+        <p className="mt-3 max-w-3xl text-base leading-relaxed text-body">
           {project.blurb}
         </p>
 
-        <ul className="mt-5 flex flex-wrap gap-2">
+        {project.highlights.length > 0 ? (
+          <ul className="mt-6 space-y-3 border-l-2 border-line pl-5">
+            {project.highlights.map((point, i) => (
+              <li key={i} className="text-sm leading-relaxed text-body">
+                {point}
+              </li>
+            ))}
+          </ul>
+        ) : null}
+
+        <ul className="mt-6 flex flex-wrap gap-2">
           {project.tags.map((tag) => (
             <li
               key={tag}
@@ -59,7 +58,7 @@ function ProjectCard({ project }: { project: Project }) {
         </ul>
 
         {project.github || project.live ? (
-          <div className="mt-6 flex items-center gap-5 border-t border-line pt-4">
+          <div className="mt-6 flex items-center gap-5 border-t border-line pt-5">
             {project.github ? (
               <a
                 href={project.github}
@@ -95,11 +94,11 @@ export default function Projects() {
       id="projects"
       eyebrow="Work"
       title="Selected projects"
-      intro="A few things I've built. Each one started as a real problem someone needed solved, not a tutorial."
+      intro="Systems I designed and shipped, with the decisions that made them work rather than just the feature list."
     >
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div className="space-y-6">
         {site.projects.map((project, i) => (
-          <Reveal key={project.title} delay={i * 90} className="h-full">
+          <Reveal key={project.title} delay={i * 70}>
             <ProjectCard project={project} />
           </Reveal>
         ))}

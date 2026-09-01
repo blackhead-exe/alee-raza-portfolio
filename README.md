@@ -34,7 +34,12 @@ A Resume button appears in the hero automatically. Leave it `""` to hide it.
 1. Drop images into `public/projects/` (e.g. `public/projects/dashboard.png`)
 2. On that project set `image: "/projects/dashboard.png"`
 
-No image means the card renders a clean gradient panel, which still looks fine.
+No image means the card simply has no image panel, which looks fine too.
+
+### Project fields
+Each project takes `title`, `period`, `blurb`, `highlights` (the bullet list),
+`tags`, `github`, `live`, `featured` (shows a Featured pill) and `image`.
+Set `highlights: []` if you want a short card with no bullets.
 
 ### Hiding a whole section
 Set its array to empty in `site.ts`:

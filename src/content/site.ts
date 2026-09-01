@@ -2,7 +2,8 @@
  * =============================================================
  *  ALL SITE CONTENT LIVES HERE.
  *  Edit this one file to update the whole portfolio.
- *  Anything marked TODO is a placeholder - replace it.
+ *  Everything below comes from your CV. The few things that
+ *  weren't on it are marked with TODO.
  * =============================================================
  */
 
@@ -11,64 +12,127 @@ export const site = {
   name: "Syed Ali Raza",
   shortName: "Ali Raza",
   initials: "AR",
-  title: "Full Stack Developer", // TODO: confirm your title
+  title: "AI Automation & GHL Systems Engineer",
   tagline:
-    "I build data dashboards, internal tools and automations that turn messy spreadsheets into decisions teams actually trust.", // TODO
-  location: "Pakistan", // TODO
-  email: "hello@example.com", // TODO: the email you want public
-  resumeUrl: "", // TODO: put resume.pdf in /public and set "/resume.pdf"
-  avatar: "", // TODO: put photo in /public and set "/avatar.jpg" (blank = initials badge)
+    "I architect CRM systems that run themselves. Pipelines, automation workflows, lead scoring and the reporting layer on top, built so a sales team stops chasing spreadsheets and starts trusting one screen.",
+  location: "Bahawalpur, Pakistan",
+  email: "aleehassan4286@outlook.com",
+
+  // TODO: your CV PDF also carries your phone number and home address, so it is
+  // deliberately not published here. Strip those, save it as public/resume.pdf,
+  // set this to "/resume.pdf" and a Resume button appears in the hero.
+  resumeUrl: "",
+
+  // TODO: put a photo in /public and set this to "/avatar.jpg".
+  // Left blank, the hero shows a clean initials badge instead.
+  avatar: "",
 
   /* ---------- 2. SOCIAL ---------- */
   socials: {
-    github: "https://github.com/", // TODO
-    linkedin: "https://linkedin.com/in/", // TODO
-    x: "", // optional, leave "" to hide
+    // TODO: wasn't on your CV. Add "https://github.com/username" and the icon appears.
+    github: "",
+    linkedin: "https://linkedin.com/in/ali-raza-3b1705247",
+    x: "",
   },
 
   /* ---------- 3. ABOUT ---------- */
   about: {
     heading: "About",
     paragraphs: [
-      "I'm a developer focused on the unglamorous half of software: the pipelines, dashboards and internal tools that a business runs on every day. Most of my work starts with a team drowning in spreadsheets and ends with a single screen they check every morning.", // TODO
-      "I work mainly across React, TypeScript and Node, and I'm comfortable wiring up third-party APIs, CRMs and Google Sheets into something reliable. I care a lot about data being correct, because a dashboard nobody believes is worse than no dashboard at all.", // TODO
-      "Right now I'm open to full-time and freelance work. If you have a reporting or automation problem that keeps coming back, I'd like to hear about it.", // TODO
+      "I am an automation-focused CRM and funnel specialist. Most of my work is designing end-to-end customer acquisition systems in GoHighLevel: structured pipelines, multi-channel workflows, lead scoring, and funnels that connect marketing, sales and communication into one flow from lead capture through to closing and retention.",
+      "I approach it as systems engineering rather than campaign setup. That means conditional logic gates, error-handling workflows for failed messages and bounced emails, audit-visible note logging on every touchpoint, and escalation rules for leads going stale, so the system keeps working when something inevitably breaks.",
+      "Alongside the automation I build the reporting layer that proves it worked. The BI dashboard I built for Solid Rock Consulting syncs live CRM data into Google Sheets on a schedule and renders it as a React and TypeScript application, with the calculation layer covered by automated tests, because numbers nobody believes are worse than no numbers at all.",
+      "My background is Data Science, which is where the bias toward measurable outcomes comes from. I am open to full-time roles and freelance work on CRM architecture, automation and internal tooling.",
     ],
-    // Small stat strip under the about text. Set to [] to hide.
     stats: [
-      { value: "3+", label: "Years building" }, // TODO
-      { value: "10+", label: "Projects shipped" }, // TODO
-      { value: "5+", label: "APIs integrated" }, // TODO
+      { value: "4", label: "CRM systems architected" },
+      { value: "36", label: "Automation workflows built" },
+      { value: "117", label: "Automated tests written" },
     ],
   },
 
   /* ---------- 4. PROJECTS ---------- */
   projects: [
     {
-      title: "Sales Pipeline Dashboard", // TODO
+      title: "Solid Rock Consulting BI Dashboard",
+      period: "2026",
       blurb:
-        "A live reporting dashboard that syncs CRM records into Google Sheets, derives funnel stages, and surfaces stuck deals, owner performance and data-quality gaps in one view.",
-      tags: ["React", "TypeScript", "Vite", "Google Sheets API", "Vercel"],
-      github: "",
-      live: "",
-      featured: true,
-      image: "", // TODO: "/projects/dashboard.png" - blank renders a gradient card
-    },
-    {
-      title: "CRM Sync Service", // TODO
-      blurb:
-        "A scheduled Node service that pulls contacts and opportunities from a CRM, normalises inconsistent field data, and writes clean, deduplicated rows downstream.",
-      tags: ["Node.js", "REST APIs", "Automation", "Cron"],
+        "An internal business intelligence platform that syncs live GoHighLevel CRM data into Google Sheets and renders it as a 25-route React application covering four lead funnels plus a combined cross-funnel view.",
+      highlights: [
+        "Unattended sync running as a Vercel serverless function every 15 minutes across 2 GHL pipelines, 325+ opportunities, contact tags and calendar events into 4 Sheet tabs, using full-tab rewrites for self-healing runs, per-record failure isolation and an append-only audit log.",
+        "Derived the business logic GHL does not store: first-seen stage entry dates, tag-driven funnel placement, and a max(tag depth, stage depth) rule, after establishing that contact tags were a more reliable signal than manually moved pipeline stages.",
+        "13 reusable page components parameterised across funnels and 8 shared components, including click-to-drill-down record modals with CSV export and custom date range filtering.",
+        "Fail-closed Basic Auth at the Vercel edge, a token-gated sync endpoint and a read-only Sheets-scoped key, with 117 Vitest tests covering the pure calculation layer.",
+      ],
+      tags: [
+        "React",
+        "TypeScript",
+        "Vite",
+        "Tailwind CSS",
+        "Recharts",
+        "Node.js",
+        "Google Sheets API",
+        "GHL API",
+        "Vercel",
+      ],
       github: "",
       live: "",
       featured: true,
       image: "",
     },
     {
-      title: "Project Three", // TODO
+      title: "Summer100 CRM & Business Development Automation",
+      period: "2026",
       blurb:
-        "Short description of what the project does and, more importantly, what problem it solved for whoever used it.",
-      tags: ["Next.js", "Tailwind CSS"],
+        "A complete business development system for Solid Rock Consulting on GoHighLevel: an 8-stage pipeline from Targeted through to Closed Won or Lost, backed by 13 interconnected workflows, a custom field schema, tag taxonomy, QA scenarios and a phased rollout plan.",
+      highlights: [
+        "Appointment automation across 3 calendars covering confirmations, 24-hour and 1-hour reminders, no-show recovery and internal booking notifications gated by appointment-status conditions.",
+        "Outcome-based nurture tracks per product line (Not Ready, Not Interested, Interested But Not Now) with mandatory dated note logging on every touchpoint for full contact-level audit visibility.",
+        "Round robin lead assignment across a 5-member BD team, stale-lead escalation at days 7, 14 and 21, and a Pause Follow Up control to suspend nurture journeys during cross-pipeline transfers.",
+        "External React multi-step lead capture funnels integrated with the GHL Contacts API via private integration tokens, plus a LinkedIn Insight Tag deployment tying ad spend to pipeline outcomes.",
+      ],
+      tags: [
+        "GoHighLevel",
+        "CRM Architecture",
+        "React",
+        "REST APIs",
+        "LinkedIn Ads",
+      ],
+      github: "",
+      live: "",
+      featured: true,
+      image: "",
+    },
+    {
+      title: "RevOps Readiness Scorecard",
+      period: "2025",
+      blurb:
+        "A scoring and automation engine built around a 4-pillar weighted quiz, feeding 9 interconnected tag-triggered workflows that handle submission, pillar weakness detection, deal risk classification and intent mapping.",
+      highlights: [
+        "Multi-factor priority engine calculating a REVOPS_PRIORITY_SCORE from score tier, growth intent, budget status, pillar weaknesses and deal killer penalties, classifying every contact as High, Medium or Low.",
+        "5-tier classification from Platinum to Red with tier-specific emails, risk escalation workflows, automated task creation and a 2-stage nurture journey with conditional booking-check exits.",
+      ],
+      tags: [
+        "GoHighLevel",
+        "Lead Scoring",
+        "Conditional Logic",
+        "Email Automation",
+      ],
+      github: "",
+      live: "",
+      featured: false,
+      image: "",
+    },
+    {
+      title: "ENDevo CRM System",
+      period: "2025",
+      blurb:
+        "A dual-segment CRM covering both B2C and B2B lead journeys, with 2 dedicated pipelines and 14 automated workflows spanning entry through to conversion.",
+      highlights: [
+        "3 multi-track B2C nurture sequences with webhook-based data mapping of 27 custom fields, conditional logic gates and cold lead routing.",
+        "B2B booking automation with Slack, SMS and email notifications at booking, 24 hours and 1 hour out, plus structured cancellation and no-show handling with opportunity status updates.",
+      ],
+      tags: ["GoHighLevel", "Webhooks", "Slack", "SMS & Email Automation"],
       github: "",
       live: "",
       featured: false,
@@ -79,64 +143,85 @@ export const site = {
   /* ---------- 5. SKILLS ---------- */
   skills: [
     {
-      group: "Languages",
-      items: ["TypeScript", "JavaScript", "Python", "SQL", "HTML", "CSS"], // TODO
+      group: "CRM & Automation",
+      items: [
+        "GoHighLevel",
+        "CRM Architecture",
+        "Pipeline Optimization",
+        "Workflow Automation",
+        "Lead Scoring & Segmentation",
+        "Appointment Automation",
+      ],
     },
     {
-      group: "Frameworks & Libraries",
-      items: ["React", "Next.js", "Node.js", "Express", "Tailwind CSS", "Recharts"],
+      group: "Funnels & Growth",
+      items: [
+        "Sales Funnel Design",
+        "Conversion Optimization",
+        "Customer Journey Mapping",
+        "Email & SMS Automation",
+        "AI Chatbot Workflows",
+        "LinkedIn Ads Tracking",
+      ],
     },
     {
-      group: "Data & APIs",
-      items: ["Google Sheets API", "REST APIs", "Webhooks", "PostgreSQL"],
+      group: "Engineering",
+      items: [
+        "React",
+        "TypeScript",
+        "JavaScript",
+        "Node.js",
+        "Tailwind CSS",
+        "Recharts",
+        "Vite",
+        "Vitest",
+      ],
     },
     {
-      group: "Tools & Platforms",
-      items: ["Git", "GitHub", "Vercel", "Vite", "Figma"],
+      group: "Data & Integrations",
+      items: [
+        "Google Sheets API",
+        "GHL API",
+        "REST APIs",
+        "Webhooks",
+        "Serverless Functions",
+        "Vercel",
+      ],
     },
   ],
 
   /* ---------- 6. EXPERIENCE ---------- */
-  // Delete entries you don't need. Set experience: [] to hide the section.
   experience: [
     {
-      role: "Full Stack Developer", // TODO
-      company: "Company Name",
-      period: "2024 - Present",
+      role: "CRM & AI Automation Engineer",
+      // TODO: name the company here if you would rather have it on the site.
+      company: "Freelance / Contract",
+      period: "2025 - Present",
       location: "Remote",
       points: [
-        "Built and maintained an internal reporting dashboard used daily by the sales and operations teams.",
-        "Automated a manual spreadsheet workflow, cutting a multi-hour weekly reporting task down to minutes.",
-        "Integrated third-party CRM and Sheets APIs with retry handling and field normalisation.",
-      ],
-    },
-    {
-      role: "Previous Role", // TODO
-      company: "Company Name",
-      period: "2022 - 2024",
-      location: "Remote",
-      points: [
-        "One clear outcome you delivered, with a number if you have one.",
-        "Another responsibility that shows range.",
+        "Designed and deployed end-to-end funnel systems including landing pages, survey funnels and booking workflows, improving lead capture structure and user flow consistency.",
+        "Built and optimised multi-stage CRM pipelines from Lead through Booked, No-Show and Closed, giving the sales cycle proper tracking and conversion visibility.",
+        "Developed automated email and SMS communication systems for confirmations, reminders, follow-ups and re-engagement, cutting manual intervention.",
+        "Implemented lead scoring frameworks using conditional logic and custom fields to prioritise high-intent prospects and improve response efficiency.",
+        "Engineered error-handling workflows for failed messages, bounced emails and inactive leads, keeping the system running and the data accurate.",
       ],
     },
   ],
 
   /* ---------- 7. EDUCATION ---------- */
-  // Set education: [] to hide.
   education: [
     {
-      degree: "BS Computer Science", // TODO
-      institution: "University Name",
-      period: "2018 - 2022",
+      degree: "BS Data Science",
+      institution: "Islamia University of Bahawalpur",
+      period: "2022 - 2026",
     },
-  ],
+  ] as ReadonlyArray<{ degree: string; institution: string; period: string }>,
 
   /* ---------- 8. CONTACT ---------- */
   contact: {
-    heading: "Let's work together",
+    heading: "Let's build a system that runs itself",
     body:
-      "I'm open to full-time roles and freelance projects. Send me a note about what you're building and I'll get back to you within a day or two.",
+      "I am open to full-time roles and freelance projects, especially CRM architecture, GoHighLevel builds, automation rescues and the reporting layer that proves any of it worked. Tell me what is breaking and I will tell you how I would fix it.",
   },
 } as const;
 
