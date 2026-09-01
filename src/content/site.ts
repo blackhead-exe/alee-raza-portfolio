@@ -23,17 +23,16 @@ export const site = {
   ],
   tagline:
     "I architect CRM systems that run themselves. Pipelines, automation workflows, lead scoring and the reporting layer on top, built so a sales team stops chasing spreadsheets and starts trusting one screen.",
-  location: "Bahawalpur, Pakistan",
+  // Removed on request. Put a city back here and the pin reappears in the hero.
+  location: "",
   email: "aleehassan4286@outlook.com",
 
-  // TODO: your CV PDF also carries your phone number and home address, so it is
-  // deliberately not published here. Strip those, save it as public/resume.pdf,
-  // set this to "/resume.pdf" and a Resume button appears in the hero.
-  resumeUrl: "",
+  // public/resume.pdf is your CV with the home address removed. Your phone
+  // number is still on it, so anyone who downloads it gets that too.
+  resumeUrl: "/resume.pdf",
 
-  // TODO: put a photo in /public and set this to "/avatar.jpg".
-  // Left blank, the hero shows a clean initials badge instead.
-  avatar: "",
+  // Blank this out and the hero falls back to the initials badge.
+  avatar: "/avatar.jpg",
 
   /* ---------- 2. SOCIAL ---------- */
   socials: {

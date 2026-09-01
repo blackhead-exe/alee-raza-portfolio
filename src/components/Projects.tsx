@@ -22,7 +22,7 @@ function ProjectCard({ project }: { project: Project }) {
     <TiltCard className="rounded-2xl">
       <article className="group/card relative overflow-hidden rounded-2xl border border-line bg-canvas transition-[border-color,box-shadow] duration-300 hover:border-accent-line hover:shadow-[0_24px_60px_-32px_rgba(11,18,32,0.45)]">
         {project.image ? (
-          <div className="relative aspect-[21/9] border-b border-line bg-surface">
+          <div className="relative aspect-[16/9] border-b border-line bg-surface">
             <Image
               src={project.image}
               alt={project.title}
