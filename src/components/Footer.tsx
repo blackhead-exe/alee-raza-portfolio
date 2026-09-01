@@ -11,7 +11,7 @@ export default function Footer() {
           {navLinks.map((link) => (
             <li key={link.href}>
               <a
-                href={link.href}
+                href={`/${link.href}`}
                 className="text-sm text-muted transition-colors hover:text-accent"
               >
                 {link.label}

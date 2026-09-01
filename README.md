@@ -49,6 +49,36 @@ Set its array to empty in `site.ts`:
 If you hide a section, also delete its entry from `navLinks` at the bottom of
 `site.ts` so the nav doesn't link to nothing.
 
+### Project case study pages
+
+Each project can have its own page at `/projects/<slug>`. The card on the home
+page then links to it with a "Read case study" prompt.
+
+Card content lives in `src/content/site.ts`. The long write-up lives in:
+
+```
+src/content/caseStudies.ts
+```
+
+keyed by the project's `slug`. Each entry takes:
+
+| Field | What it is |
+|---|---|
+| `intro` | One or two sentences under the page title |
+| `meta` | The facts strip: role, year, client, platform |
+| `sections` | The narrative. Each has a `heading`, `paragraphs`, optional `bullets` |
+| `decisions` | Optional. Choices worth defending, with the reasoning |
+| `outcomes` | Optional. The metric strip near the end |
+
+A project with no entry in `caseStudies.ts` simply has no page, and its card
+drops the case study link. Pages are statically generated and added to
+`sitemap.xml` automatically, so nothing else needs updating when you add one.
+
+### Adding a whole new project
+1. Add an entry to `projects` in `src/content/site.ts` with a unique `slug`
+   and a `visual` of `sync`, `pipeline`, `scoring` or `funnels`
+2. Optionally add a matching entry to `src/content/caseStudies.ts`
+
 ### Changing the colour
 One line in `src/app/globals.css`:
 

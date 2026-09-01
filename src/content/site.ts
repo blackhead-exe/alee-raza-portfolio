@@ -63,6 +63,7 @@ export const site = {
     {
       title: "Solid Rock Consulting BI Dashboard",
       visual: "sync",
+      slug: "bi-dashboard",
       period: "2026",
       blurb:
         "An internal business intelligence platform that syncs live GoHighLevel CRM data into Google Sheets and renders it as a 25-route React application covering four lead funnels plus a combined cross-funnel view.",
@@ -91,6 +92,7 @@ export const site = {
     {
       title: "Summer100 CRM & Business Development Automation",
       visual: "pipeline",
+      slug: "summer100-bd-automation",
       period: "2026",
       blurb:
         "A complete business development system for Solid Rock Consulting on GoHighLevel: an 8-stage pipeline from Targeted through to Closed Won or Lost, backed by 13 interconnected workflows, a custom field schema, tag taxonomy, QA scenarios and a phased rollout plan.",
@@ -115,6 +117,7 @@ export const site = {
     {
       title: "RevOps Readiness Scorecard",
       visual: "scoring",
+      slug: "revops-scorecard",
       period: "2025",
       blurb:
         "A scoring and automation engine built around a 4-pillar weighted quiz, feeding 9 interconnected tag-triggered workflows that handle submission, pillar weakness detection, deal risk classification and intent mapping.",
@@ -136,6 +139,7 @@ export const site = {
     {
       title: "ENDevo CRM System",
       visual: "funnels",
+      slug: "endevo-crm",
       period: "2025",
       blurb:
         "A dual-segment CRM covering both B2C and B2B lead journeys, with 2 dedicated pipelines and 14 automated workflows spanning entry through to conversion.",
