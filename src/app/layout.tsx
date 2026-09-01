@@ -13,8 +13,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-/** Live URL. Update here if you attach a custom domain later. */
-export const siteUrl = "https://alee-raza.vercel.app";
+/**
+ * The live URL, and the single source of truth for canonical links,
+ * OpenGraph tags, robots.txt and sitemap.xml.
+ *
+ * This MUST match the domain the site actually serves from. If you rename
+ * the Vercel project or attach a custom domain, change it here and nowhere
+ * else. Pointing it at a URL that 404s tells Google the real page does not
+ * exist and makes every shared link preview dead.
+ */
+export const siteUrl = "https://alee-raza-portfolio.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
