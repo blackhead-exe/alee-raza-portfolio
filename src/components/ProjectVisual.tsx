@@ -2,13 +2,15 @@
 
 import { useRef } from "react";
 import { motion, useInView, useReducedMotion } from "motion/react";
+import DashboardVisual from "./visuals/DashboardVisual";
 
 export type VisualVariant =
   | "sync"
   | "pipeline"
   | "scoring"
   | "funnels"
-  | "accounts";
+  | "accounts"
+  | "dashboard";
 
 const ACCENT = "var(--color-accent)";
 const LINE = "var(--color-line)";
@@ -609,7 +611,17 @@ const VARIANTS: Record<VisualVariant, (p: { play: boolean }) => React.ReactEleme
   scoring: ScoringVisual,
   funnels: FunnelsVisual,
   accounts: AccountsVisual,
+  dashboard: DashboardVisual,
 };
+
+/** Schematics use a wide short frame; the UI mock uses a 16:9 screen. */
+const VIEWBOXES: Partial<Record<VisualVariant, string>> = {
+  dashboard: "0 0 420 236",
+};
+const DEFAULT_VIEWBOX = "0 0 420 170";
+
+/** Variants that paint their own full background need no grid behind them. */
+const FULL_BLEED = new Set<VisualVariant>(["dashboard"]);
 
 /**
  * A small animated schematic standing in for a screenshot. Each variant
@@ -628,15 +640,21 @@ export default function ProjectVisual({ variant }: { variant: VisualVariant }) {
       ref={ref}
       className="relative overflow-hidden border-b border-line bg-surface"
     >
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 opacity-60 [background-image:linear-gradient(to_right,var(--color-line)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-line)_1px,transparent_1px)] [background-size:26px_26px] [mask-image:radial-gradient(80%_70%_at_50%_50%,black,transparent)]"
-      />
+      {FULL_BLEED.has(variant) ? null : (
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 opacity-60 [background-image:linear-gradient(to_right,var(--color-line)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-line)_1px,transparent_1px)] [background-size:26px_26px] [mask-image:radial-gradient(80%_70%_at_50%_50%,black,transparent)]"
+        />
+      )}
       <svg
-        viewBox="0 0 420 170"
+        viewBox={VIEWBOXES[variant] ?? DEFAULT_VIEWBOX}
         className="relative block h-auto w-full"
         role="img"
-        aria-label={`Animated schematic of the ${variant} architecture`}
+        aria-label={
+          variant === "dashboard"
+            ? "Mock-up of the dashboard interface, shown with demo data"
+            : `Animated schematic of the ${variant} architecture`
+        }
       >
         <Variant play={play} />
       </svg>

@@ -87,7 +87,7 @@ export const site = {
     },
     {
       title: "Solid Rock Consulting BI Dashboard",
-      visual: "sync",
+      visual: "dashboard",
       slug: "bi-dashboard",
       period: "2026",
       blurb:

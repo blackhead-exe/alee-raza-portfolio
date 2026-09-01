@@ -53,7 +53,7 @@ export default function Hero() {
       />
 
       <div className="mx-auto w-full max-w-5xl px-6 pb-20 pt-16 sm:pb-28 sm:pt-24">
-        <div className="grid items-center gap-12 md:grid-cols-[1.35fr_1fr]">
+        <div className="grid items-center gap-12 md:grid-cols-[1.2fr_1fr]">
           <motion.div variants={container} initial="hidden" animate="show">
             <motion.div variants={item}>
               <span className="inline-flex items-center gap-2 rounded-full border border-accent-line bg-canvas/80 px-3 py-1.5 text-xs font-medium text-accent backdrop-blur">
@@ -129,38 +129,50 @@ export default function Hero() {
             ) : null}
           </motion.div>
 
-          {/* Avatar panel, floating gently */}
+          {/* Portrait panel: the photo fills a tall frame rather than sitting
+              inside a small box, and fades into the page along the bottom. */}
           <motion.div
             className="order-first md:order-none"
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.85, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           >
             <motion.div
-              className="relative mx-auto w-44 sm:w-56 md:w-full md:max-w-xs"
-              animate={reduced ? {} : { y: [0, -10, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="relative mx-auto w-56 sm:w-72 md:w-full"
+              animate={reduced ? {} : { y: [0, -8, 0] }}
+              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
             >
-              {/* Slowly rotating conic ring behind the portrait */}
-              <motion.div
+              {/* Soft accent bloom sitting behind the panel */}
+              <div
                 aria-hidden="true"
-                className="absolute -inset-[3px] -z-10 rounded-[1.9rem] bg-[conic-gradient(from_0deg,var(--color-accent),#7c3aed,#0ea5e9,var(--color-accent))] opacity-70 blur-[6px]"
-                animate={reduced ? {} : { rotate: 360 }}
-                transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
+                className="absolute -inset-6 -z-10 rounded-[3rem] bg-[radial-gradient(60%_60%_at_50%_35%,rgba(37,99,235,0.22),transparent_70%)] blur-2xl"
               />
-              <div className="aspect-square overflow-hidden rounded-[1.75rem] border border-line bg-surface shadow-[0_20px_50px_-24px_rgba(11,18,32,0.4)]">
+
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] border border-line bg-surface shadow-[0_30px_70px_-30px_rgba(11,18,32,0.5)]">
                 {site.avatar ? (
-                  <Image
-                    src={site.avatar}
-                    alt={site.name}
-                    width={480}
-                    height={480}
-                    priority
-                    className="h-full w-full object-cover"
-                  />
+                  <>
+                    <Image
+                      src={site.avatar}
+                      alt={site.name}
+                      fill
+                      priority
+                      sizes="(max-width: 768px) 288px, 380px"
+                      className="object-cover object-[50%_22%]"
+                    />
+                    {/* Bottom fade so the portrait dissolves into the page */}
+                    <div
+                      aria-hidden="true"
+                      className="absolute inset-x-0 bottom-0 h-2/5 bg-[linear-gradient(to_top,var(--color-canvas)_2%,rgba(255,255,255,0.55)_38%,transparent_100%)]"
+                    />
+                    {/* Faint inner edge to keep the frame crisp on light photos */}
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 rounded-[1.75rem] ring-1 ring-inset ring-black/5"
+                    />
+                  </>
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(145deg,var(--color-accent-soft),var(--color-canvas))]">
-                    <span className="text-5xl font-semibold tracking-tight text-accent sm:text-6xl">
+                    <span className="text-6xl font-semibold tracking-tight text-accent">
                       {site.initials}
                     </span>
                   </div>
