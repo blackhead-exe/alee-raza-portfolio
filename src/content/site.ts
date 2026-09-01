@@ -52,14 +52,40 @@ export const site = {
       "My background is Data Science, which is where the bias toward measurable outcomes comes from. I am open to full-time roles and freelance work on CRM architecture, automation and internal tooling.",
     ],
     stats: [
-      { value: "4", label: "CRM systems architected" },
-      { value: "36", label: "Automation workflows built" },
+      { value: "5", label: "CRM systems architected" },
+      { value: "56", label: "Automation workflows built" },
       { value: "117", label: "Automated tests written" },
     ],
   },
 
   /* ---------- 4. PROJECTS ---------- */
   projects: [
+    {
+      title: "Multi-Account Insurance CRM",
+      visual: "accounts",
+      slug: "insurance-crm-multi-account",
+      period: "2026",
+      blurb:
+        "A four sub-account GoHighLevel system for a US life insurance operation, where a lead moves from Closer to Validator to Retention entirely through webhooks, and sensitive data is destroyed the moment a team no longer needs it.",
+      highlights: [
+        "On approval the system nulls 11 sensitive fields from the Closer account, the full SSN, banking and medical set, and stamps a sensitive-data-wiped audit tag, because GoHighLevel has no field-level read restrictions for standard user roles.",
+        "Each approval fires three outbound webhooks carrying three deliberately different payloads, so Retention and Funding only ever receive the fields their job needs and SSN, banking and medical data never enter those accounts at all.",
+        "37 pipeline stages across 4 pipelines, 20 workflows and 31 tags, with every cross-account handoff built on inbound and outbound webhooks joined on phone number rather than a shared database.",
+        "A 12-month funding tracker that auto-increments and advances stage on each confirmed payment, plus DNF and chargeback paths that route the case back to the original closer with the reason attached.",
+      ],
+      tags: [
+        "GoHighLevel",
+        "CRM Architecture",
+        "Webhooks",
+        "Data Minimisation",
+        "Multi-Account Systems",
+        "Insurance",
+      ],
+      github: "",
+      live: "",
+      featured: true,
+      image: "",
+    },
     {
       title: "Solid Rock Consulting BI Dashboard",
       visual: "sync",

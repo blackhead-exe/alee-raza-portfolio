@@ -3,7 +3,12 @@
 import { useRef } from "react";
 import { motion, useInView, useReducedMotion } from "motion/react";
 
-export type VisualVariant = "sync" | "pipeline" | "scoring" | "funnels";
+export type VisualVariant =
+  | "sync"
+  | "pipeline"
+  | "scoring"
+  | "funnels"
+  | "accounts";
 
 const ACCENT = "var(--color-accent)";
 const LINE = "var(--color-line)";
@@ -393,11 +398,217 @@ function FunnelsVisual({ play }: { play: boolean }) {
   );
 }
 
+/* ------------------------------------------------------------------
+   5. accounts - four sub-accounts joined by webhooks, with the
+      sensitive data destroyed at the moment of approval
+   ------------------------------------------------------------------ */
+function AccountsVisual({ play }: { play: boolean }) {
+  const CYCLE = 6;
+  const nodes = [
+    { x: 62, label: "CLOSER" },
+    { x: 210, label: "VALIDATOR" },
+    { x: 358, label: "RETENTION" },
+  ];
+  const nodeY = 62;
+  const halfW = 46;
+
+  return (
+    <>
+      {/* return path for DNF and chargeback, arcing back to the Closer */}
+      <path
+        d={`M ${358} ${nodeY - 17} C 358 22, 62 22, 62 ${nodeY - 17}`}
+        fill="none"
+        stroke={LINE}
+        strokeWidth={1.4}
+        strokeDasharray="4 4"
+      />
+      {/* SMIL keeps the packet on the curve; rendered only while in view */}
+      {play ? (
+        <circle r={2.4} fill={FAINT}>
+          <animateMotion
+            dur={`${CYCLE}s`}
+            repeatCount="indefinite"
+            keyPoints="0;0;1;1"
+            keyTimes="0;0.68;0.95;1"
+            calcMode="linear"
+            path={`M ${358} ${nodeY - 17} C 358 22, 62 22, 62 ${nodeY - 17}`}
+          />
+          <animate
+            attributeName="opacity"
+            dur={`${CYCLE}s`}
+            repeatCount="indefinite"
+            values="0;0;1;1;0;0"
+            keyTimes="0;0.68;0.72;0.92;0.95;1"
+          />
+        </circle>
+      ) : null}
+      <text x={210} y={20} textAnchor="middle" {...labelProps}>
+        DNF / CHARGEBACK RETURNS
+      </text>
+
+      {/* forward connectors */}
+      {[0, 1].map((i) => (
+        <line
+          key={i}
+          x1={nodes[i].x + halfW}
+          y1={nodeY}
+          x2={nodes[i + 1].x - halfW}
+          y2={nodeY}
+          stroke={LINE}
+          strokeWidth={1.5}
+        />
+      ))}
+
+      {/* payloads shrink as they move right: fewer, smaller packets downstream */}
+      {[
+        { seg: 0, count: 3, r: 3.2, delay: 0.2 },
+        { seg: 1, count: 2, r: 2, delay: 2.6 },
+      ].map(({ seg, count, r, delay }) =>
+        Array.from({ length: count }).map((_, d) => (
+          <motion.circle
+            key={`${seg}-${d}`}
+            cy={nodeY}
+            r={r}
+            fill={ACCENT}
+            initial={{ cx: nodes[seg].x + halfW, opacity: 0 }}
+            animate={
+              play
+                ? {
+                    cx: [nodes[seg].x + halfW, nodes[seg + 1].x - halfW],
+                    opacity: [0, 1, 1, 0],
+                  }
+                : {}
+            }
+            transition={{
+              duration: 1.1,
+              delay: delay + d * 0.22,
+              repeat: Infinity,
+              repeatDelay: CYCLE - 1.1,
+              ease: "easeInOut",
+            }}
+          />
+        )),
+      )}
+
+      {/* the three working accounts */}
+      {nodes.map((node, i) => (
+        <g key={node.label}>
+          <motion.rect
+            x={node.x - halfW}
+            y={nodeY - 17}
+            width={halfW * 2}
+            height={34}
+            rx={8}
+            fill="var(--color-canvas)"
+            stroke={LINE}
+            strokeWidth={1.5}
+            animate={
+              play
+                ? { stroke: [LINE, LINE, ACCENT, LINE] }
+                : {}
+            }
+            transition={{
+              duration: CYCLE,
+              times: [0, 0.05 + i * 0.18, 0.15 + i * 0.18, 0.32 + i * 0.18],
+              repeat: Infinity,
+            }}
+          />
+          <text x={node.x} y={nodeY + 4} textAnchor="middle" {...labelProps} fill="var(--color-ink)">
+            {node.label}
+          </text>
+        </g>
+      ))}
+
+      {/* what the Closer holds, and loses on approval */}
+      <motion.text
+        x={62}
+        y={nodeY + 30}
+        textAnchor="middle"
+        {...labelProps}
+        fontSize={7}
+        initial={{ opacity: 0 }}
+        animate={play ? { opacity: [0, 1, 1, 0, 0] } : {}}
+        transition={{
+          duration: CYCLE,
+          times: [0, 0.06, 0.52, 0.58, 1],
+          repeat: Infinity,
+        }}
+      >
+        SSN · BANKING · MEDICAL
+      </motion.text>
+      <motion.text
+        x={62}
+        y={nodeY + 30}
+        textAnchor="middle"
+        {...labelProps}
+        fontSize={7}
+        fill={ACCENT}
+        initial={{ opacity: 0 }}
+        animate={play ? { opacity: [0, 0, 1, 1, 0] } : {}}
+        transition={{
+          duration: CYCLE,
+          times: [0, 0.58, 0.63, 0.9, 1],
+          repeat: Infinity,
+        }}
+      >
+        WIPED ON APPROVAL
+      </motion.text>
+
+      {/* every event mirrors down into Central */}
+      {nodes.map((node, i) => (
+        <g key={`mirror-${node.label}`}>
+          <line
+            x1={node.x}
+            y1={nodeY + 17}
+            x2={210}
+            y2={128}
+            stroke={LINE}
+            strokeWidth={1}
+            strokeDasharray="3 5"
+          />
+          <motion.circle
+            r={2}
+            fill={FAINT}
+            initial={{ cx: node.x, cy: nodeY + 17, opacity: 0 }}
+            animate={
+              play
+                ? { cx: [node.x, 210], cy: [nodeY + 17, 128], opacity: [0, 1, 0] }
+                : {}
+            }
+            transition={{
+              duration: 1.2,
+              delay: 0.9 + i * 0.9,
+              repeat: Infinity,
+              repeatDelay: CYCLE - 1.2,
+              ease: "easeIn",
+            }}
+          />
+        </g>
+      ))}
+
+      <rect
+        x={210 - 52}
+        y={128}
+        width={104}
+        height={28}
+        rx={8}
+        fill="var(--color-accent-soft)"
+        stroke={ACCENT}
+        strokeWidth={1.4}
+      />
+      <text x={210} y={146} textAnchor="middle" {...labelProps} fill={ACCENT}>
+        CENTRAL MIRROR
+      </text>
+    </>
+  );
+}
+
 const VARIANTS: Record<VisualVariant, (p: { play: boolean }) => React.ReactElement> = {
   sync: SyncVisual,
   pipeline: PipelineVisual,
   scoring: ScoringVisual,
   funnels: FunnelsVisual,
+  accounts: AccountsVisual,
 };
 
 /**
