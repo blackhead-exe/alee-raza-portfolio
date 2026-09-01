@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { navLinks, site } from "@/content/site";
 import { CloseIcon, MenuIcon } from "./Icons";
 
@@ -66,12 +67,18 @@ export default function Nav() {
             <li key={link.href}>
               <a
                 href={link.href}
-                className={`rounded-full px-3.5 py-2 text-sm transition-colors ${
-                  active === link.href
-                    ? "bg-accent-soft text-accent"
-                    : "text-body hover:text-ink"
+                className={`relative rounded-full px-3.5 py-2 text-sm transition-colors ${
+                  active === link.href ? "text-accent" : "text-body hover:text-ink"
                 }`}
               >
+                {active === link.href ? (
+                  <motion.span
+                    layoutId="nav-pill"
+                    aria-hidden="true"
+                    className="absolute inset-0 -z-10 rounded-full bg-accent-soft"
+                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                  />
+                ) : null}
                 {link.label}
               </a>
             </li>
@@ -98,8 +105,16 @@ export default function Nav() {
         </button>
       </nav>
 
+      <AnimatePresence initial={false}>
       {open ? (
-        <div className="border-t border-line bg-canvas md:hidden">
+        <motion.div
+          key="mobile-sheet"
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          className="overflow-hidden border-t border-line bg-canvas md:hidden"
+        >
           <ul className="mx-auto flex w-full max-w-5xl flex-col px-6 py-2">
             {navLinks.map((link) => (
               <li key={link.href}>
@@ -122,8 +137,9 @@ export default function Nav() {
               </a>
             </li>
           </ul>
-        </div>
+        </motion.div>
       ) : null}
+      </AnimatePresence>
     </header>
   );
 }
