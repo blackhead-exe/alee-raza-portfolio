@@ -26,6 +26,8 @@ export type CaseStudy = {
    * no webhook URLs, no customer records, no tokens.
    */
   gallery?: { src: string; caption: string; tall?: boolean }[];
+  /** Overrides the default line above the gallery. Say what the reader is looking at. */
+  galleryNote?: string;
 };
 
 export const caseStudies: Record<string, CaseStudy> = {
@@ -260,6 +262,50 @@ export const caseStudies: Record<string, CaseStudy> = {
       { value: "117", label: "Vitest tests" },
       { value: "15", label: "Minute sync interval" },
       { value: "4", label: "Funnels unified" },
+    ],
+    galleryNote:
+      "The application running against generated demo data. Every company, contact and number below is invented, so nothing here is a client record. The layout, the charts and the logic computing them are exactly what ships.",
+    gallery: [
+      {
+        src: "/projects/dashboard/overall-dashboard.png",
+        caption:
+          "The combined cross-funnel view. Lead volume by source, then the Summer100 pipeline as a cumulative funnel, with targeted accounts and organic funnel leads kept as two separate populations rather than merged into one flattering total.",
+      },
+      {
+        src: "/projects/dashboard/summer100-dashboard.png",
+        caption:
+          "Summer100's own dashboard: lead source split, qualification status, and the full pipeline from Dream 100 through to Converted.",
+      },
+      {
+        src: "/projects/dashboard/overall-operations.png",
+        caption:
+          "Operations. Every synced record in one sortable, searchable table with source, stage and owner filters, above a qualification rate the same filters drive.",
+      },
+      {
+        src: "/projects/dashboard/overall-data-quality.png",
+        caption:
+          "Data quality. Missing company names, missing owners, duplicate contacts and multiple leads per company, each carrying a severity and a drill-down to the exact rows behind it.",
+      },
+      {
+        src: "/projects/dashboard/overall-stuck.png",
+        caption:
+          "Stuck leads: anything sitting past its stage threshold, with per-funnel thresholds rather than one global rule that would be wrong for most of them.",
+      },
+      {
+        src: "/projects/dashboard/overall-owners.png",
+        caption:
+          "Owner performance per funnel, with the missing-owner count sitting deliberately alongside it, because an owner league table is misleading if some records have no owner at all.",
+      },
+      {
+        src: "/projects/dashboard/overall-nurture.png",
+        caption:
+          "Nurture. Which of the three journeys each lead is tagged into, and whether that journey has actually produced a booking or a conversion.",
+      },
+      {
+        src: "/projects/dashboard/wfm-navigator-dashboard.png",
+        caption:
+          "One of the four business development funnels. The same page components, parameterised per funnel rather than copied, which is what makes 25 routes maintainable.",
+      },
     ],
   },
 

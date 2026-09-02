@@ -237,8 +237,8 @@ export default async function ProjectPage({
                   Inside the build
                 </h2>
                 <p className="mt-3 text-base leading-relaxed text-body">
-                  Screenshots from the live system. Webhook URLs, contact
-                  records and anything else identifying have been removed.
+                  {study.galleryNote ??
+                    "Screenshots from the live system. Webhook URLs, contact records and anything else identifying have been removed."}
                 </p>
               </Reveal>
               <div className="mt-8 grid gap-6 sm:grid-cols-2">
