@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { site } from "@/content/site";
 import "./globals.css";
 
@@ -98,6 +99,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
         />
         {children}
+        {/* Cookieless page analytics. Collects nothing until Analytics is
+            switched on for the project in the Vercel dashboard. */}
+        <Analytics />
       </body>
     </html>
   );
