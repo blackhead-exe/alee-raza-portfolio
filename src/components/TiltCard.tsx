@@ -39,7 +39,7 @@ export default function TiltCard({
   const rotateX = useSpring(tiltX, spring);
   const rotateY = useSpring(tiltY, spring);
 
-  const spotlight = useMotionTemplate`radial-gradient(340px circle at ${mouseX}px ${mouseY}px, rgba(37,99,235,0.10), transparent 72%)`;
+  const spotlight = useMotionTemplate`radial-gradient(340px circle at ${mouseX}px ${mouseY}px, rgba(15,118,110,0.10), transparent 72%)`;
 
   function handleMove(event: React.PointerEvent<HTMLDivElement>) {
     if (reduced || event.pointerType !== "mouse") return;
