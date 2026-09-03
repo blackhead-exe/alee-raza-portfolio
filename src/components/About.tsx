@@ -10,7 +10,7 @@ export default function About() {
   const { about } = site;
 
   return (
-    <Section id="about" eyebrow="Introduction" title={about.heading} tinted>
+    <Section id="about" eyebrow="Introduction" title={about.heading} surface="dark">
       <div className="grid gap-12 md:grid-cols-[1.6fr_1fr]">
         <div className="space-y-5">
           {about.paragraphs.map((p, i) => (
@@ -27,12 +27,12 @@ export default function About() {
                 <motion.div
                   whileHover={{ y: -4 }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  className="rounded-xl border border-line bg-canvas px-4 py-5 transition-colors hover:border-accent-line md:px-5"
+                  className="border-t border-line px-1 py-6 transition-colors hover:border-accent"
                 >
-                  <dd className="text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
+                  <dd className="display text-5xl text-ink sm:text-6xl">
                     <AnimatedCounter value={stat.value} />
                   </dd>
-                  <dt className="mt-1 text-xs uppercase tracking-wide text-muted">
+                  <dt className="mt-2 text-[0.7rem] uppercase tracking-[0.2em] text-muted">
                     {stat.label}
                   </dt>
                 </motion.div>

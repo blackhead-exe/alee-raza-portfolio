@@ -66,7 +66,10 @@ export default async function ProjectPage({
     <>
       <ScrollProgress />
 
-      <header className="sticky top-0 z-50 border-b border-line bg-canvas/85 backdrop-blur-md">
+      <header
+        data-surface="dark"
+        className="sticky top-0 z-50 border-b border-line bg-canvas/85 backdrop-blur-md"
+      >
         <nav className="mx-auto flex h-16 w-full max-w-3xl items-center justify-between px-6">
           <Link
             href="/#projects"
@@ -86,7 +89,7 @@ export default async function ProjectPage({
         </nav>
       </header>
 
-      <main className="flex-1">
+      <main data-surface="dark" className="flex-1 bg-canvas">
         {/* ---------- title block ---------- */}
         <section className="border-b border-line bg-surface">
           <div className="mx-auto w-full max-w-3xl px-6 py-14 sm:py-20">
@@ -94,7 +97,10 @@ export default async function ProjectPage({
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
                 Case study
               </p>
-              <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-tight text-ink sm:text-4xl">
+              <h1
+                className="display mt-4 block text-ink"
+                style={{ fontSize: "clamp(2.2rem, 5.5vw, 4.5rem)" }}
+              >
                 {project.title}
               </h1>
               <p className="mt-5 text-lg leading-relaxed text-body">
@@ -164,7 +170,7 @@ export default async function ProjectPage({
         {/* ---------- animated schematic ---------- */}
         <div className="mx-auto w-full max-w-3xl px-6 pt-14">
           <Reveal>
-            <div className="overflow-hidden rounded-2xl border border-line">
+            <div className="overflow-hidden rounded-sm border border-line">
               <ProjectVisual variant={project.visual as VisualVariant} />
             </div>
           </Reveal>
@@ -176,7 +182,7 @@ export default async function ProjectPage({
             {study.sections.map((section, i) => (
               <Reveal key={section.heading} delay={i * 60}>
                 <section>
-                  <h2 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+                  <h2 className="display text-2xl text-ink sm:text-4xl">
                     {section.heading}
                   </h2>
                   <div className="mt-4 space-y-4">
@@ -204,7 +210,7 @@ export default async function ProjectPage({
           {study.decisions && study.decisions.length > 0 ? (
             <div className="mt-16">
               <Reveal>
-                <h2 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+                <h2 className="display text-2xl text-ink sm:text-4xl">
                   Decisions worth defending
                 </h2>
                 <p className="mt-3 text-base leading-relaxed text-body">
@@ -215,7 +221,7 @@ export default async function ProjectPage({
               <div className="mt-8 space-y-4">
                 {study.decisions.map((decision, i) => (
                   <Reveal key={decision.title} delay={i * 70}>
-                    <div className="rounded-xl border border-line bg-surface p-6 transition-colors hover:border-accent-line">
+                    <div className="rounded-sm border border-line bg-surface p-6 transition-colors hover:border-accent-line">
                       <h3 className="text-base font-semibold text-ink">
                         {decision.title}
                       </h3>
@@ -233,7 +239,7 @@ export default async function ProjectPage({
           {study.gallery && study.gallery.length > 0 ? (
             <div className="mt-16">
               <Reveal>
-                <h2 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">
+                <h2 className="display text-2xl text-ink sm:text-4xl">
                   Inside the build
                 </h2>
                 <p className="mt-3 text-base leading-relaxed text-body">
@@ -248,7 +254,7 @@ export default async function ProjectPage({
                     delay={i * 60}
                     className={shot.tall ? "" : "sm:col-span-2"}
                   >
-                    <figure className="overflow-hidden rounded-xl border border-line bg-surface">
+                    <figure className="overflow-hidden rounded-sm border border-line bg-surface">
                       <a
                         href={shot.src}
                         target="_blank"
@@ -277,7 +283,7 @@ export default async function ProjectPage({
           {/* ---------- outcomes ---------- */}
           {study.outcomes && study.outcomes.length > 0 ? (
             <Reveal>
-              <div className="mt-16 rounded-2xl border border-line bg-surface p-8">
+              <div className="mt-16 rounded-sm border border-line bg-surface p-8">
                 <h2 className="text-sm font-semibold uppercase tracking-wide text-ink">
                   By the numbers
                 </h2>
@@ -305,7 +311,7 @@ export default async function ProjectPage({
               <Reveal>
                 <Link
                   href={`/projects/${next.slug}`}
-                  className="group block rounded-2xl border border-line bg-canvas p-6 transition-colors hover:border-accent-line"
+                  className="group block rounded-sm border border-line bg-canvas p-6 transition-colors hover:border-accent-line"
                 >
                   <p className="text-xs uppercase tracking-wide text-muted">
                     Next case study
@@ -321,7 +327,7 @@ export default async function ProjectPage({
             ) : null}
 
             <Reveal delay={80}>
-              <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-line bg-canvas p-6">
+              <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-sm border border-line bg-canvas p-6">
                 <p className="text-base text-body">
                   Got a system that needs building or rescuing?
                 </p>

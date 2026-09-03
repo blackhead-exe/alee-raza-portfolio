@@ -30,6 +30,7 @@ export default function Experience() {
       eyebrow="Background"
       title="Experience"
       intro="Where I have worked and what I actually shipped there."
+      surface="dark"
     >
       {hasExperience ? (
         <ol ref={timelineRef} className="relative space-y-10 pl-8">
@@ -53,7 +54,7 @@ export default function Experience() {
               />
               <Reveal delay={i * 90}>
                 <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                  <h3 className="text-lg font-semibold tracking-tight text-ink">
+                  <h3 className="display text-2xl text-ink sm:text-3xl">
                     {job.role}
                   </h3>
                   <span className="text-sm text-muted">{job.period}</span>

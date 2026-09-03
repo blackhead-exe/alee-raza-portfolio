@@ -19,8 +19,8 @@ function ProjectCard({ project }: { project: Project }) {
   const href = `/projects/${project.slug}`;
 
   return (
-    <TiltCard className="rounded-2xl">
-      <article className="group/card relative overflow-hidden rounded-2xl border border-line bg-canvas transition-[border-color,box-shadow] duration-300 hover:border-accent-line hover:shadow-[0_24px_60px_-32px_rgba(11,18,32,0.45)]">
+    <TiltCard className="rounded-sm" maxTilt={2}>
+      <article className="group/card relative overflow-hidden rounded-sm border border-line bg-surface transition-[border-color,box-shadow] duration-300 hover:border-accent-line hover:shadow-[0_24px_60px_-32px_rgba(11,18,32,0.45)]">
         {project.image ? (
           <div className="relative aspect-[16/9] border-b border-line bg-surface">
             <Image
@@ -37,7 +37,7 @@ function ProjectCard({ project }: { project: Project }) {
 
         <div className="p-6 sm:p-8">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-            <h3 className="text-xl font-semibold tracking-tight text-ink">
+            <h3 className="display text-2xl text-ink sm:text-3xl">
               {hasCaseStudy ? (
                 // Stretched link: the whole card is clickable, but the title
                 // stays the single accessible link for screen readers.
@@ -148,6 +148,7 @@ export default function Projects() {
       eyebrow="Work"
       title="Selected projects"
       intro="Systems I designed and shipped. Open any of them for the full write-up, including the architecture and the decisions behind it."
+      surface="dark"
     >
       <div className="space-y-8">
         {site.projects.map((project, i) => (

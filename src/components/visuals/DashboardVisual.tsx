@@ -10,13 +10,13 @@ import { motion } from "motion/react";
  * than a screenshot.
  */
 
-const ACCENT = "var(--color-accent)";
-const LINE = "var(--color-line)";
-const INK = "var(--color-ink)";
-const CANVAS = "var(--color-canvas)";
+const ACCENT = "#2a78d6";
+const LINE = "#e6eaf0";
+const INK = "#0b1220";
+const CANVAS = "#ffffff";
 
 const label = {
-  fill: "var(--color-faint)",
+  fill: "#94a3b8",
   fontFamily: "var(--font-sans)",
 } as const;
 
@@ -124,7 +124,7 @@ export default function DashboardVisual({ play }: { play: boolean }) {
   return (
     <>
       {/* ---- app chrome ---- */}
-      <rect x={0} y={0} width={420} height={236} fill="var(--color-surface)" />
+      <rect x={0} y={0} width={420} height={236} fill="#f7f9fc" />
       <rect x={0} y={0} width={78} height={236} fill={INK} />
       <rect x={78} y={0} width={342} height={32} fill={CANVAS} />
       <line x1={78} y1={32} x2={420} y2={32} stroke={LINE} strokeWidth={1} />

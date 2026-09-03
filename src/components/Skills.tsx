@@ -26,7 +26,6 @@ export default function Skills() {
       eyebrow="Toolkit"
       title="Skills & technologies"
       intro="The tools I reach for most. I care more about picking the right one than collecting logos."
-      tinted
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {site.skills.map((group, gi) => (
@@ -35,8 +34,8 @@ export default function Skills() {
             delay={gi * 80}
             className={`h-full ${SPANS[gi % SPANS.length]}`}
           >
-            <TiltCard className="h-full rounded-2xl" maxTilt={3}>
-              <div className="relative h-full overflow-hidden rounded-2xl border border-line bg-canvas p-6 transition-colors duration-300 hover:border-accent-line">
+            <TiltCard className="h-full rounded-sm" maxTilt={2}>
+              <div className="relative h-full overflow-hidden rounded-sm border border-line bg-surface p-6 transition-colors duration-300 hover:border-accent">
                 {/* A faint accent corner so the tiles read as a set, not a table */}
                 <div
                   aria-hidden="true"
@@ -46,7 +45,7 @@ export default function Skills() {
                   <h3 className="text-sm font-semibold uppercase tracking-wide text-ink">
                     {group.group}
                   </h3>
-                  <span className="shrink-0 text-xs tabular-nums text-faint">
+                  <span className="display shrink-0 text-2xl text-accent">
                     {String(gi + 1).padStart(2, "0")}
                   </span>
                 </div>

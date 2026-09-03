@@ -1,4 +1,5 @@
 import Cursor from "@/components/Cursor";
+import Loader from "@/components/Loader";
 import Nav from "@/components/Nav";
 import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ScrollProgress";
@@ -19,6 +20,7 @@ export default function Home() {
       >
         Skip to content
       </a>
+      <Loader />
       <SmoothScroll />
       <Cursor />
       <ScrollProgress />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type ElementType } from "react";
+import { useRef, type CSSProperties, type ElementType } from "react";
 import { motion, useInView, useReducedMotion } from "motion/react";
 
 /**
@@ -15,6 +15,7 @@ export default function TextReveal({
   delay = 0,
   stagger = 0.055,
   once = true,
+  style,
 }: {
   text: string;
   as?: ElementType;
@@ -24,6 +25,7 @@ export default function TextReveal({
   /** seconds between words */
   stagger?: number;
   once?: boolean;
+  style?: CSSProperties;
 }) {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once, amount: 0.3 });
@@ -31,11 +33,15 @@ export default function TextReveal({
   const words = text.split(" ");
 
   if (reduced) {
-    return <Tag className={className}>{text}</Tag>;
+    return (
+      <Tag className={className} style={style}>
+        {text}
+      </Tag>
+    );
   }
 
   return (
-    <Tag ref={ref} className={className} aria-label={text}>
+    <Tag ref={ref} className={className} style={style} aria-label={text}>
       {words.map((word, i) => (
         <span
           key={`${word}-${i}`}

@@ -1,36 +1,93 @@
 @import "tailwindcss";
 
-/* ---------------------------------------------------------
-   Design tokens. Change the accent here and the whole site
-   follows. Deliberately light-only: no dark variant.
-   --------------------------------------------------------- */
-@theme {
-  --color-ink: #0b1220;
-  --color-body: #475569;
-  --color-muted: #64748b;
-  --color-faint: #94a3b8;
-  --color-line: #e6eaf0;
-  --color-surface: #f7f9fc;
-  --color-canvas: #ffffff;
+/* ---------------------------------------------------------------
+   Two surfaces, one token set.
 
-  --color-accent: #0f766e;
-  --color-accent-hover: #0b5f59;
-  --color-accent-soft: #effbf8;
-  --color-accent-line: #b8e5dd;
+   Every component styles itself with semantic tokens (ink, body,
+   canvas, accent...). A section flips the whole palette by carrying
+   data-surface="dark", so nothing inside it needs dark: variants.
+
+   Contrast is measured, not eyeballed:
+     cream on black          17.29:1
+     black on cream          17.29:1
+     gold #d4b483 on black   10.05:1
+     gold #7a5c1e on cream    5.43:1
+   The gold has two steps because a single one cannot clear 4.5:1
+   against both a near-black and a cream ground.
+   --------------------------------------------------------------- */
+@theme {
+  --color-canvas: #f4efe6;
+  --color-surface: #ebe4d6;
+  --color-ink: #0a0a0a;
+  --color-body: #4a453d;
+  --color-muted: #6b655b;
+  --color-faint: #918a7e;
+  --color-line: #ddd5c6;
+
+  --color-accent: #7a5c1e;
+  --color-accent-hover: #5f4715;
+  --color-accent-soft: #efe6d2;
+  --color-accent-line: #d8c69c;
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-anton), var(--font-geist-sans), sans-serif;
+}
+
+[data-surface="dark"] {
+  --color-canvas: #0a0a0a;
+  --color-surface: #131313;
+  --color-ink: #f4efe6;
+  --color-body: #b8b2a8;
+  --color-muted: #8f8880;
+  --color-faint: #6b655e;
+  --color-line: #272727;
+
+  --color-accent: #d4b483;
+  --color-accent-hover: #e2c79c;
+  --color-accent-soft: #191510;
+  --color-accent-line: #3d3527;
 }
 
 html {
-  /* Lenis owns the scroll. Leaving CSS smooth-scroll on would fight it,
-     because Lenis writes scrollTop directly and the browser would then
-     animate that write a second time. */
+  /* Lenis owns the scroll; CSS smooth-scroll would animate its writes twice. */
   scroll-behavior: auto;
   color-scheme: light;
+  background-color: #0a0a0a;
 }
 
-/* Lenis' own requirements, straight from its docs. */
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-body);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Editorial display type: tight, condensed, unapologetically large. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 0.86;
+  text-transform: uppercase;
+}
+
+section[id] {
+  scroll-margin-top: 5rem;
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: #0a0a0a;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Lenis' own requirements, from its docs. */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -45,30 +102,6 @@ html.lenis body {
   overflow: hidden;
 }
 
-body {
-  background-color: var(--color-canvas);
-  color: var(--color-body);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-}
-
-/* Anchor targets clear the sticky header */
-section[id] {
-  scroll-margin-top: 5rem;
-}
-
-::selection {
-  background-color: var(--color-accent);
-  color: #fff;
-}
-
-/* Consistent, visible keyboard focus everywhere */
-:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 3px;
-  border-radius: 4px;
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -78,13 +111,5 @@ section[id] {
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
-  }
-}
-
-/* Motion drives the entrance animations now; this keeps long-running
-   decorative transforms off the main thread. */
-@media (prefers-reduced-motion: no-preference) {
-  .will-animate {
-    will-change: transform, opacity;
   }
 }

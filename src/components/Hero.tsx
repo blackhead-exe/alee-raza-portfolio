@@ -4,23 +4,23 @@ import Image from "next/image";
 import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { site } from "@/content/site";
+import CircularBadge from "./CircularBadge";
 import MagneticButton from "./MagneticButton";
 import RoleRotator from "./RoleRotator";
 import TextReveal from "./TextReveal";
-import { ArrowUpRightIcon, DownloadIcon, MailIcon, PinIcon } from "./Icons";
+import { ArrowUpRightIcon, DownloadIcon, MailIcon } from "./Icons";
 
-/** Staggered entrance for the left-hand column. */
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.09, delayChildren: 0.05 } },
+  show: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 22 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
@@ -28,100 +28,90 @@ export default function Hero() {
   const reduced = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
 
-  // Parallax: the decorative layers drift faster than the page, the
-  // portrait drifts against it, so the hero comes apart as you leave it.
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
   });
-  const blobY = useTransform(scrollYProgress, [0, 1], [0, 160]);
-  const gridY = useTransform(scrollYProgress, [0, 1], [0, 70]);
-  const copyY = useTransform(scrollYProgress, [0, 1], [0, 56]);
+  const copyY = useTransform(scrollYProgress, [0, 1], [0, 70]);
   const portraitY = useTransform(scrollYProgress, [0, 1], [0, -46]);
-  const fade = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
+  const fade = useTransform(scrollYProgress, [0, 0.9], [1, 0]);
 
   return (
-    <section ref={sectionRef} id="top" className="relative overflow-hidden">
-      {/* Drifting colour blobs behind everything. Decorative only. */}
-      <motion.div
+    <section
+      ref={sectionRef}
+      id="top"
+      className="relative overflow-hidden bg-canvas"
+    >
+      {/* Hairline rule grid, the editorial scaffold behind everything */}
+      <div
         aria-hidden="true"
-        style={reduced ? undefined : { y: blobY }}
-        className="pointer-events-none absolute inset-0 -z-10"
+        className="pointer-events-none absolute inset-0 mx-auto hidden max-w-7xl grid-cols-4 md:grid"
       >
-        <motion.div
-          className="absolute -left-24 -top-32 h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(circle,rgba(15,118,110,0.18),transparent_68%)] blur-2xl"
-          animate={reduced ? {} : { x: [0, 60, -20, 0], y: [0, 40, 20, 0] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute -right-20 top-8 h-[24rem] w-[24rem] rounded-full bg-[radial-gradient(circle,rgba(13,148,136,0.14),transparent_68%)] blur-2xl"
-          animate={reduced ? {} : { x: [0, -50, 25, 0], y: [0, 35, -15, 0] }}
-          transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute left-1/3 top-56 h-[20rem] w-[20rem] rounded-full bg-[radial-gradient(circle,rgba(6,148,162,0.12),transparent_68%)] blur-2xl"
-          animate={reduced ? {} : { x: [0, 40, -35, 0], y: [0, -30, 25, 0] }}
-          transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </motion.div>
+        {[0, 1, 2, 3].map((i) => (
+          <div key={i} className="border-l border-line/60 last:border-r" />
+        ))}
+      </div>
 
-      {/* Faint grid, faded out toward the edges */}
       <motion.div
-        aria-hidden="true"
-        style={reduced ? undefined : { y: gridY }}
-        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.55] [background-image:linear-gradient(to_right,var(--color-line)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-line)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(70%_55%_at_50%_0%,black,transparent)]"
-      />
+        className="relative mx-auto w-full max-w-7xl px-6 pb-20 pt-28 sm:pt-36"
+        style={reduced ? undefined : { opacity: fade }}
+      >
+        <motion.div variants={container} initial="hidden" animate="show">
+          <motion.div variants={item} className="flex items-center gap-4">
+            <span className="inline-flex items-center gap-2 rounded-full border border-accent-line px-3 py-1.5 text-[0.7rem] uppercase tracking-[0.2em] text-accent">
+              <span className="relative flex h-1.5 w-1.5">
+                <motion.span
+                  className="absolute inline-flex h-full w-full rounded-full bg-accent"
+                  animate={reduced ? {} : { scale: [1, 2.6, 1], opacity: [0.7, 0, 0.7] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
+                />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
+              </span>
+              Available for work
+            </span>
+            <span className="hidden h-px flex-1 bg-line sm:block" />
+            <span className="hidden text-[0.7rem] uppercase tracking-[0.2em] text-muted sm:block">
+              Portfolio 2026
+            </span>
+          </motion.div>
 
-      <div className="mx-auto w-full max-w-5xl px-6 pb-20 pt-16 sm:pb-28 sm:pt-24">
-        <div className="grid items-center gap-12 md:grid-cols-[1.2fr_1fr]">
+          {/* The name gets the full container width. Nothing overlaps it, so
+              it can be sized off the viewport without colliding with the
+              portrait the way an absolutely-placed one did. */}
+          <motion.div variants={item} className="mt-10">
+            <TextReveal
+              as="h1"
+              text={site.name}
+              delay={0.1}
+              stagger={0.09}
+              className="display block text-ink"
+              style={{ fontSize: "clamp(3rem, 12.2vw, 11rem)" }}
+            />
+          </motion.div>
+        </motion.div>
+
+        <div className="mt-10 grid gap-12 border-t border-line pt-10 lg:grid-cols-[1fr_auto] lg:gap-16">
           <motion.div
             variants={container}
             initial="hidden"
             animate="show"
-            style={reduced ? undefined : { y: copyY, opacity: fade }}
+            style={reduced ? undefined : { y: copyY }}
           >
-            <motion.div variants={item}>
-              <span className="inline-flex items-center gap-2 rounded-full border border-accent-line bg-canvas/80 px-3 py-1.5 text-xs font-medium text-accent backdrop-blur">
-                <span className="relative flex h-1.5 w-1.5">
-                  <motion.span
-                    className="absolute inline-flex h-full w-full rounded-full bg-accent"
-                    animate={reduced ? {} : { scale: [1, 2.6, 1], opacity: [0.7, 0, 0.7] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
-                  />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
-                </span>
-                Available for work
-              </span>
-            </motion.div>
-
-            <motion.div variants={item}>
-              <TextReveal
-                as="h1"
-                text={site.name}
-                delay={0.15}
-                stagger={0.08}
-                className="mt-6 bg-[linear-gradient(120deg,var(--color-ink)_0%,var(--color-ink)_45%,var(--color-accent)_100%)] bg-clip-text text-4xl font-semibold leading-[1.08] tracking-tight text-transparent sm:text-5xl lg:text-6xl"
-              />
-            </motion.div>
-
-            <motion.p
-              variants={item}
-              className="mt-3 text-xl font-medium text-accent sm:text-2xl"
-            >
+            <motion.p variants={item} className="text-2xl text-ink sm:text-3xl">
               <RoleRotator roles={site.roles} />
             </motion.p>
 
             <motion.p
               variants={item}
-              className="mt-6 max-w-xl text-lg leading-relaxed text-body"
+              className="mt-6 max-w-xl text-base leading-relaxed text-body"
             >
               {site.tagline}
             </motion.p>
 
-            <motion.div variants={item} className="mt-8 flex flex-wrap items-center gap-3">
+            <motion.div variants={item} className="mt-10 flex flex-wrap items-center gap-3">
               <MagneticButton
                 href="#projects"
-                className="inline-flex items-center gap-2 rounded-full bg-ink px-5 py-3 text-sm font-medium text-white shadow-[0_10px_30px_-12px_rgba(11,18,32,0.6)] transition-colors hover:bg-accent"
+                className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3.5 text-sm uppercase tracking-wide text-canvas transition-colors hover:bg-accent hover:text-ink"
               >
                 View my work
                 <ArrowUpRightIcon />
@@ -129,7 +119,7 @@ export default function Hero() {
               <MagneticButton
                 href={`mailto:${site.email}`}
                 strength={0.2}
-                className="inline-flex items-center gap-2 rounded-full border border-line bg-canvas/80 px-5 py-3 text-sm font-medium text-ink backdrop-blur transition-colors hover:border-accent-line hover:text-accent"
+                className="inline-flex items-center gap-2 rounded-full border border-ink/25 px-6 py-3.5 text-sm uppercase tracking-wide text-ink transition-colors hover:border-accent hover:text-accent"
               >
                 <MailIcon className="h-4 w-4" />
                 Contact me
@@ -139,7 +129,7 @@ export default function Hero() {
                   href={site.resumeUrl}
                   download
                   strength={0.18}
-                  className="inline-flex items-center gap-2 rounded-full px-4 py-3 text-sm font-medium text-body transition-colors hover:text-accent"
+                  className="inline-flex items-center gap-2 px-3 py-3.5 text-sm uppercase tracking-wide text-muted transition-colors hover:text-accent"
                 >
                   <DownloadIcon />
                   Resume
@@ -147,88 +137,54 @@ export default function Hero() {
               ) : null}
             </motion.div>
 
-            {site.location ? (
-              <motion.div variants={item} className="mt-8">
-                <span className="inline-flex items-center gap-1.5 text-sm text-muted">
-                  <PinIcon />
-                  {site.location}
-                </span>
-              </motion.div>
-            ) : null}
+            <motion.div variants={item} className="mt-14 flex items-center gap-3">
+              <span className="text-[0.7rem] uppercase tracking-[0.3em] text-muted">
+                Scroll to explore
+              </span>
+              <motion.span
+                className="block h-px w-16 origin-left bg-accent"
+                animate={reduced ? {} : { scaleX: [0.3, 1, 0.3] }}
+                transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </motion.div>
           </motion.div>
 
-          {/* Portrait panel: the photo fills a tall frame rather than sitting
-              inside a small box, and fades into the page along the bottom. */}
+          {/* Portrait sits in the flow beside the copy, never over the type */}
           <motion.div
-            className="order-first md:order-none"
             style={reduced ? undefined : { y: portraitY }}
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.85, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.9, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="justify-self-center lg:justify-self-end"
           >
-            <motion.div
-              className="relative mx-auto w-56 sm:w-72 md:w-full"
-              animate={reduced ? {} : { y: [0, -8, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-            >
-              {/* Soft accent bloom sitting behind the panel */}
-              <div
-                aria-hidden="true"
-                className="absolute -inset-6 -z-10 rounded-[3rem] bg-[radial-gradient(60%_60%_at_50%_35%,rgba(15,118,110,0.24),transparent_70%)] blur-2xl"
-              />
-
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] border border-line bg-surface shadow-[0_30px_70px_-30px_rgba(11,18,32,0.5)]">
+            <div className="relative w-56 sm:w-72 lg:w-[19rem]">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-sm border border-line bg-surface">
                 {site.avatar ? (
-                  <>
-                    <Image
-                      src={site.avatar}
-                      alt={site.name}
-                      fill
-                      priority
-                      sizes="(max-width: 768px) 288px, 380px"
-                      className="object-cover object-[50%_22%]"
-                    />
-                    {/* Bottom fade so the portrait dissolves into the page */}
-                    <div
-                      aria-hidden="true"
-                      className="absolute inset-x-0 bottom-0 h-2/5 bg-[linear-gradient(to_top,var(--color-canvas)_2%,rgba(255,255,255,0.55)_38%,transparent_100%)]"
-                    />
-                    {/* Faint inner edge to keep the frame crisp on light photos */}
-                    <div
-                      aria-hidden="true"
-                      className="pointer-events-none absolute inset-0 rounded-[1.75rem] ring-1 ring-inset ring-black/5"
-                    />
-                  </>
+                  <Image
+                    src={site.avatar}
+                    alt={site.name}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 288px, 304px"
+                    className="object-cover"
+                  />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(145deg,var(--color-accent-soft),var(--color-canvas))]">
-                    <span className="text-6xl font-semibold tracking-tight text-accent">
+                  <div className="flex h-full w-full items-center justify-center">
+                    <span className="display text-6xl text-accent">
                       {site.initials}
                     </span>
                   </div>
                 )}
               </div>
-            </motion.div>
+
+              <CircularBadge
+                text="BASED IN PAKISTAN"
+                className="absolute -bottom-9 -left-9 h-24 w-24 text-ink sm:h-28 sm:w-28"
+              />
+            </div>
           </motion.div>
         </div>
-
-        {/* Scroll cue */}
-        <motion.div
-          className="mt-16 hidden justify-center sm:flex"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.1, duration: 0.6 }}
-        >
-          <motion.a
-            href="#about"
-            aria-label="Scroll to About"
-            className="flex h-9 w-6 items-start justify-center rounded-full border border-line pt-1.5 text-faint transition-colors hover:border-accent-line"
-            animate={reduced ? {} : { y: [0, 7, 0] }}
-            transition={{ duration: 1.9, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <span className="h-1.5 w-1 rounded-full bg-accent" />
-          </motion.a>
-        </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }

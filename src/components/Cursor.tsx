@@ -62,7 +62,7 @@ export default function Cursor() {
           x: hot ? -22 : -11,
           y: hot ? -22 : -11,
           opacity: visible ? (hot ? 0.9 : 0.45) : 0,
-          backgroundColor: hot ? "rgba(15,118,110,0.10)" : "rgba(15,118,110,0)",
+          backgroundColor: hot ? "rgba(212,180,131,0.14)" : "rgba(212,180,131,0)",
         }}
         transition={{ type: "spring", stiffness: 420, damping: 30, mass: 0.4 }}
       />

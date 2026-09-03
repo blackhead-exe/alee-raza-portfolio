@@ -2,44 +2,59 @@ import type { ReactNode } from "react";
 import Reveal from "./Reveal";
 import TextReveal from "./TextReveal";
 
+/**
+ * A page section. Setting surface="dark" flips every semantic token
+ * inside it, so nothing nested needs to know which ground it is on.
+ */
 export default function Section({
   id,
   eyebrow,
   title,
   intro,
   children,
-  tinted = false,
+  surface = "light",
 }: {
   id: string;
   eyebrow: string;
   title: string;
   intro?: string;
   children: ReactNode;
-  tinted?: boolean;
+  surface?: "light" | "dark";
 }) {
   return (
     <section
       id={id}
-      className={tinted ? "border-y border-line bg-surface" : "bg-canvas"}
+      data-surface={surface === "dark" ? "dark" : undefined}
+      className="border-t border-line bg-canvas"
     >
-      <div className="mx-auto w-full max-w-5xl px-6 py-20 sm:py-24">
+      <div className="mx-auto w-full max-w-7xl px-6 py-24 sm:py-32">
         <Reveal>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
-            {eyebrow}
-          </p>
+          <div className="flex items-center gap-4">
+            <span className="text-[0.7rem] uppercase tracking-[0.3em] text-accent">
+              {eyebrow}
+            </span>
+            <span className="h-px flex-1 bg-line" />
+          </div>
+        </Reveal>
+
+        <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <TextReveal
             as="h2"
             text={title}
-            stagger={0.05}
-            className="mt-3 block text-3xl font-semibold tracking-tight text-ink sm:text-4xl"
+            stagger={0.06}
+            className="display block text-ink"
+            style={{ fontSize: "clamp(2.4rem, 6.5vw, 5.5rem)" }}
           />
           {intro ? (
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-body">
-              {intro}
-            </p>
+            <Reveal delay={120}>
+              <p className="max-w-xl text-base leading-relaxed text-body lg:pb-3">
+                {intro}
+              </p>
+            </Reveal>
           ) : null}
-        </Reveal>
-        <div className="mt-12">{children}</div>
+        </div>
+
+        <div className="mt-16">{children}</div>
       </div>
     </section>
   );
