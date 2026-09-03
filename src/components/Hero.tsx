@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion } from "motion/react";
+import { useRef } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { site } from "@/content/site";
 import MagneticButton from "./MagneticButton";
 import RoleRotator from "./RoleRotator";
+import TextReveal from "./TextReveal";
 import { ArrowUpRightIcon, DownloadIcon, MailIcon, PinIcon } from "./Icons";
 
 /** Staggered entrance for the left-hand column. */
@@ -24,11 +26,28 @@ const item = {
 
 export default function Hero() {
   const reduced = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Parallax: the decorative layers drift faster than the page, the
+  // portrait drifts against it, so the hero comes apart as you leave it.
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const blobY = useTransform(scrollYProgress, [0, 1], [0, 160]);
+  const gridY = useTransform(scrollYProgress, [0, 1], [0, 70]);
+  const copyY = useTransform(scrollYProgress, [0, 1], [0, 56]);
+  const portraitY = useTransform(scrollYProgress, [0, 1], [0, -46]);
+  const fade = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
 
   return (
-    <section id="top" className="relative overflow-hidden">
+    <section ref={sectionRef} id="top" className="relative overflow-hidden">
       {/* Drifting colour blobs behind everything. Decorative only. */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+      <motion.div
+        aria-hidden="true"
+        style={reduced ? undefined : { y: blobY }}
+        className="pointer-events-none absolute inset-0 -z-10"
+      >
         <motion.div
           className="absolute -left-24 -top-32 h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(circle,rgba(15,118,110,0.18),transparent_68%)] blur-2xl"
           animate={reduced ? {} : { x: [0, 60, -20, 0], y: [0, 40, 20, 0] }}
@@ -44,17 +63,23 @@ export default function Hero() {
           animate={reduced ? {} : { x: [0, 40, -35, 0], y: [0, -30, 25, 0] }}
           transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
         />
-      </div>
+      </motion.div>
 
       {/* Faint grid, faded out toward the edges */}
-      <div
+      <motion.div
         aria-hidden="true"
+        style={reduced ? undefined : { y: gridY }}
         className="pointer-events-none absolute inset-0 -z-10 opacity-[0.55] [background-image:linear-gradient(to_right,var(--color-line)_1px,transparent_1px),linear-gradient(to_bottom,var(--color-line)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(70%_55%_at_50%_0%,black,transparent)]"
       />
 
       <div className="mx-auto w-full max-w-5xl px-6 pb-20 pt-16 sm:pb-28 sm:pt-24">
         <div className="grid items-center gap-12 md:grid-cols-[1.2fr_1fr]">
-          <motion.div variants={container} initial="hidden" animate="show">
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="show"
+            style={reduced ? undefined : { y: copyY, opacity: fade }}
+          >
             <motion.div variants={item}>
               <span className="inline-flex items-center gap-2 rounded-full border border-accent-line bg-canvas/80 px-3 py-1.5 text-xs font-medium text-accent backdrop-blur">
                 <span className="relative flex h-1.5 w-1.5">
@@ -69,12 +94,15 @@ export default function Hero() {
               </span>
             </motion.div>
 
-            <motion.h1
-              variants={item}
-              className="mt-6 bg-[linear-gradient(120deg,var(--color-ink)_0%,var(--color-ink)_45%,var(--color-accent)_100%)] bg-clip-text text-4xl font-semibold leading-[1.08] tracking-tight text-transparent sm:text-5xl lg:text-6xl"
-            >
-              {site.name}
-            </motion.h1>
+            <motion.div variants={item}>
+              <TextReveal
+                as="h1"
+                text={site.name}
+                delay={0.15}
+                stagger={0.08}
+                className="mt-6 bg-[linear-gradient(120deg,var(--color-ink)_0%,var(--color-ink)_45%,var(--color-accent)_100%)] bg-clip-text text-4xl font-semibold leading-[1.08] tracking-tight text-transparent sm:text-5xl lg:text-6xl"
+              />
+            </motion.div>
 
             <motion.p
               variants={item}
@@ -133,6 +161,7 @@ export default function Hero() {
               inside a small box, and fades into the page along the bottom. */}
           <motion.div
             className="order-first md:order-none"
+            style={reduced ? undefined : { y: portraitY }}
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.85, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}

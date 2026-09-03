@@ -1,4 +1,6 @@
+import Cursor from "@/components/Cursor";
 import Nav from "@/components/Nav";
+import SmoothScroll from "@/components/SmoothScroll";
 import ScrollProgress from "@/components/ScrollProgress";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
@@ -17,6 +19,8 @@ export default function Home() {
       >
         Skip to content
       </a>
+      <SmoothScroll />
+      <Cursor />
       <ScrollProgress />
       <Nav />
       <main className="flex-1">

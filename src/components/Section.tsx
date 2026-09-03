@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Reveal from "./Reveal";
+import TextReveal from "./TextReveal";
 
 export default function Section({
   id,
@@ -26,9 +27,12 @@ export default function Section({
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
             {eyebrow}
           </p>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-            {title}
-          </h2>
+          <TextReveal
+            as="h2"
+            text={title}
+            stagger={0.05}
+            className="mt-3 block text-3xl font-semibold tracking-tight text-ink sm:text-4xl"
+          />
           {intro ? (
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-body">
               {intro}
